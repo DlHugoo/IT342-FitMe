@@ -7,4 +7,4 @@
  NAME: KATRINA MIGUELLE G. SUSON
  COURSE AND YEAR: BSIT-3
 
- DESCRIPTION: I am 21 years old, born on Aug 17,2003. Likes sleeping
+ DESCRIPTION: I am 21 years old. born on Aug 17,2003. Likes sleeping. Has a younger sister. I am happy.
