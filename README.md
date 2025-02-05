@@ -1,5 +1,15 @@
 # IT342-FitMe
 
+
+ # TEAM MEMBERS
+
+ # Member 2
+
+ NAME: KATRINA MIGUELLE G. SUSON
+ COURSE AND YEAR: BSIT-3
+
+ DESCRIPTION: I am 21 years old. born on Aug 17,2003. Likes sleeping. Has a younger sister. I am happy.
+
 # TEAM MEMBERS:
 
 ## MEMBER 1
@@ -18,5 +28,6 @@ My favorite movie is Eternal Sunshine of a Spotless Mind.
 
 ### DESCRIPTION:  
 I am 21 years old. I am from Talisay City Cebu. I watch sports specifically the NBA amd the UFC. I love to ride my motorcycle. My goal is to provide a better life for me and my family 
+
 
 
