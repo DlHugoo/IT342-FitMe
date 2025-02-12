@@ -1,10 +1,24 @@
-# IT342-FitMe
+# FitMe
 
+# Product Description
+    FitMe is a cutting-edge fitness app designed to help you achieve your health and wellness goals through simple, effective bodyweight training. Whether you're just starting your fitness journey or are already an experienced athlete, FitMe offers workout plans, real-time progress tracking, and built-in timers to guide you every step of the way. With a vast library of exercises and detailed instructions, you can work out anytime, anywhere—no equipment required. Sync with your fitness trackers, track your progress, and stay motivated with challenges and social features. FitMe makes fitness personal, convenient, and effective, helping you to build strength, improve endurance, and stay committed to your goals.
+    
+# List of Features
+    Feature 1: Log-in 
+    Feature 2: User Management 
+    Feature 3: Content Management
+    Feature 4: Workout Library with Instructions
+    Feature 5: Transaction Name
+    Feature 6: Exercise Timer
 
- # TEAM MEMBERS
+# Links
+    Figma: 
+    Diagrams:
+
+# Developers Profile
 
 ## Member 1
-NAME: DAVE LAWRENCE B. HUGO  
+NAME: DAVE LAWRENCE B. HUG 
 COURSE & YEAR: BSIT-3 
 
 ## Description:
