@@ -12,8 +12,8 @@ Feature 5: Transaction Name
 Feature 6: Exercise Timer  
 
 # Links
-Figma: 
-Diagrams:
+Figma:   
+Diagrams:  
 
 # Developers Profile
 
