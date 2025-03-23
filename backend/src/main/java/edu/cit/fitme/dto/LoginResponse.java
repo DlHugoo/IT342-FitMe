@@ -5,11 +5,14 @@ public class LoginResponse {
     private String type = "Bearer";
     private Long userId;
     private String email;
+    private String role; // ✅ New field
 
-    public LoginResponse(String token, Long userId, String email) {
+    // ✅ Updated constructor with role
+    public LoginResponse(String token, Long userId, String email, String role) {
         this.token = token;
         this.userId = userId;
         this.email = email;
+        this.role = role;
     }
 
     public String getToken() {
@@ -26,5 +29,9 @@ public class LoginResponse {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getRole() {
+        return role;
     }
 }
