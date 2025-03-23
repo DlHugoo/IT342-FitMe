@@ -3,6 +3,7 @@ package edu.cit.fitme.service;
 import edu.cit.fitme.repository.UserRepository;
 import edu.cit.fitme.entity.UserEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,9 +11,11 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository){
         this.userRepository=userRepository;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public List<UserEntity> getAllUsers(){
@@ -24,7 +27,12 @@ public class UserService {
     }
 
     public UserEntity createUser(UserEntity user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
+    }
+
+    public boolean validatePassword(String raw, String encoded) {
+        return passwordEncoder.matches(raw, encoded);
     }
 
     public Optional<UserEntity> updateUser(Long id, UserEntity updatedUser){
