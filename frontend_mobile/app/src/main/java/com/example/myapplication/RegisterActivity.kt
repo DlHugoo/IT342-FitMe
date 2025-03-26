@@ -20,10 +20,10 @@ class RegisterActivity : AppCompatActivity() {
             insets
         }
 
-        val btnLogin: Button = findViewById(R.id.btnLogin)
+        val loginLink: TextView = findViewById(R.id.loginLink)
 
         // Set click listener to navigate to Home Page
-        btnLogin.setOnClickListener {
+        loginLink.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
