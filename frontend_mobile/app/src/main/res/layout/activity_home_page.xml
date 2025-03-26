@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/homepage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <!-- Logo and App Name -->
+    <LinearLayout
+        android:id="@+id/header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/fitme_logo"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FITME"
+            android:textColor="#007BFF"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="8dp"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
+    <!-- Current Weight Section -->
+
+    <!-- Workout Levels Section -->
+    <LinearLayout
+        android:id="@+id/weight_section"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_below="@id/header_layout"
+        android:layout_marginTop="1dp"
+        android:background="#E1F5FE"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/weight_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Current Weight:"
+            android:textColor="@color/blue"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/current_weight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="74 kg"
+            android:textColor="#000000"
+            android:textSize="60sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/weight_section"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="100dp"
+            android:gravity="center">
+
+            <!-- Easy Card -->
+            <LinearLayout
+                android:id="@+id/easy_card"
+                android:layout_width="320dp"
+                android:layout_height="180dp"
+                android:orientation="horizontal"
+                android:background="@drawable/rounded_background"
+                android:padding="0dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="15dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/easy_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Easy"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/easy_desc"
+                        android:layout_width="125dp"
+                        android:layout_height="wrap_content"
+                        android:text="Loose Belly Fat"
+                        android:textColor="#FFFFFF"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/easy_image"
+                    android:layout_width="150dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/easy_image"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="0dp" />
+            </LinearLayout>
+
+            <!-- Medium Card -->
+            <LinearLayout
+                android:id="@+id/medium_card"
+                android:layout_width="320dp"
+                android:layout_height="180dp"
+                android:orientation="horizontal"
+                android:background="@drawable/rounded_background"
+                android:padding="0dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:padding="15dp">
+
+                    <TextView
+                        android:id="@+id/medium_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Medium"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/medium_desc"
+                        android:layout_width="141dp"
+                        android:layout_height="wrap_content"
+                        android:text="Rock
+                        Hard Abs"
+                        android:textColor="#FFFFFF"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/medium_image"
+                    android:layout_width="150dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/medium_image"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="0dp" />
+            </LinearLayout>
+
+            <!-- Hard Card -->
+            <LinearLayout
+                android:id="@+id/hard_card"
+                android:layout_width="320dp"
+                android:layout_height="180dp"
+                android:background="@drawable/rounded_background"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="horizontal"
+                android:padding="0dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:padding="15dp">
+
+                    <TextView
+                        android:id="@+id/hard_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hard"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/hard_desc"
+                        android:layout_width="133dp"
+                        android:layout_height="wrap_content"
+                        android:text="Intense Work Out"
+                        android:textColor="#FFFFFF"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/hard_image"
+                    android:layout_width="150dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="0dp"
+                    android:src="@drawable/hard_image" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation Bar -->
+    <LinearLayout
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:elevation="8dp">
+
+        <!-- Home Button -->
+        <LinearLayout
+            android:id="@+id/nav_home"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_home" />
+        </LinearLayout>
+
+        <!-- Stats Button -->
+        <LinearLayout
+            android:id="@+id/nav_stats"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_calendar" />
+        </LinearLayout>
+
+        <!-- Profile Button -->
+        <LinearLayout
+            android:id="@+id/nav_profile"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_profile" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
