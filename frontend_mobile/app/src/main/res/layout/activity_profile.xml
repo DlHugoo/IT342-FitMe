@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/profile"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <!-- Logo and App Name -->
+    <LinearLayout
+        android:id="@+id/header_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/fitme_logo" />
+
+        <TextView
+            android:id="@+id/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="FITME"
+            android:textColor="#007BFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+    <!-- Back, and Logout Button -->
+    <RelativeLayout
+        android:id="@+id/btn_back_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header_layout"
+        android:paddingLeft="25dp"
+        android:paddingRight="20dp">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:contentDescription="Back"
+            android:src="@drawable/ic_back"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true" />
+
+
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log Out"
+            android:textColor="@color/white"
+            app:backgroundTint="@null"
+            android:background="@drawable/button_selector"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+    <!-- Profile Title -->
+
+    <TextView
+        android:id="@+id/profile_header"
+        android:layout_width="350dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/btn_back_logout"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_bg_pressed"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:padding="12dp"
+        android:text="User Profile"
+        android:textColor="@color/white"
+        android:textSize="35sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/profile_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_header"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_marginTop="5dp">
+
+        <!-- Username -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textColor="@color/blue"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/usernameInput"
+            android:layout_width="320dp"
+            android:layout_height="50dp"
+            android:text="Username"
+            android:background="@drawable/input_bg_lightblue"
+            android:enabled="false"
+            android:padding="8dp"
+            android:paddingLeft="200dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="6dp"/>
+
+        <!-- Email Field -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:textColor="@color/blue"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/emailInput"
+            android:layout_width="320dp"
+            android:layout_height="50dp"
+            android:text="Email"
+            android:background="@drawable/input_bg_lightblue"
+            android:enabled="false"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="6dp"/>
+            />
+
+        <!-- Password Field -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Password"
+            android:textColor="@color/blue"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/passwordInput"
+            android:layout_width="320dp"
+            android:layout_height="50dp"
+            android:text="*******"
+            android:background="@drawable/input_bg_lightblue"
+            android:enabled="false"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="6dp"/>
+            />
+
+        <!-- Age and Height Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
+
+            <!-- Age Field -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Age"
+                    android:textColor="@color/blue"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/ageInput"
+                    android:layout_width="155dp"
+                    android:layout_height="50dp"
+                    android:text="18"
+                    android:background="@drawable/input_bg_lightblue"
+                    android:enabled="false"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="6dp"/>
+            </LinearLayout>
+
+            <!-- Height Field -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Height (m)"
+                    android:textColor="@color/blue"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/heightInput"
+                    android:layout_width="155dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/input_bg_lightblue"
+                    android:enabled="false"
+                    android:text="0"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="6dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btn_edit"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Edit"
+        android:textColor="@color/white"
+        android:background="@drawable/button_selector"
+        app:backgroundTint="@null"
+        android:layout_below="@id/profile_section"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"/>
+
+    <!-- Bottom Navigation Bar -->
+    <LinearLayout
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:elevation="8dp"
+        android:layout_gravity="bottom">
+
+        <!-- Home Button -->
+        <LinearLayout
+            android:id="@+id/nav_home"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_home" />
+        </LinearLayout>
+
+        <!-- Stats Button -->
+        <LinearLayout
+            android:id="@+id/nav_stats"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_calendar" />
+        </LinearLayout>
+
+        <!-- Profile Button -->
+        <LinearLayout
+            android:id="@+id/nav_profile"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_profile" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

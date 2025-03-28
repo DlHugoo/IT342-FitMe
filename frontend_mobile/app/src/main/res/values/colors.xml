@@ -5,7 +5,6 @@
     <color name="light_blue">#E3F2FD</color>
     <color name="blue">#2196F3</color>
     <color name="gray">#B0BEC5</color>
-    <color name="login">#2196F3</color>
     <color name="google">#4DBEFF</color>
     <color name="pressed">#9DD1F8</color>
 </resources>
