@@ -27,6 +27,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/createUser").permitAll()               // Public registration
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")                  // Admin-only routes
                         .requestMatchers("/api/user/**").hasAnyRole("ADMIN", "USER")        // Authenticated users
+                        .requestMatchers("/api/users/encode/**").permitAll() // 👈 Allow encoding
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
