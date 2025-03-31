@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -30,9 +32,10 @@ public class UserController {
         return userService.createUser(user);
     }
 
-    @PutMapping("/updateUser/{id}")
-    public ResponseEntity<UserEntity> updateUser(@PathVariable Long id, @RequestBody UserEntity updatedUser) {
-        return userService.updateUser(id, updatedUser)
+    @PutMapping("/updateProfile")
+    public ResponseEntity<UserEntity> updateOwnProfile(@RequestBody UserEntity updatedUser, Principal principal) {
+        String email = principal.getName(); // Automatically pulled from token
+        return userService.updateOwnProfile(email, updatedUser)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

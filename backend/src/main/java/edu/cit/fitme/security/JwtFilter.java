@@ -47,17 +47,16 @@ public class JwtFilter extends OncePerRequestFilter {
                 var userDetails = userRepository.findByEmail(email).orElse(null);
 
                 if (userDetails != null) {
-                    // Make sure role is capitalized for Spring Security (ROLE_ADMIN / ROLE_USER)
                     var authorities = Collections.singletonList(
                             new SimpleGrantedAuthority("ROLE_" + role.toUpperCase())
                     );
 
                     UsernamePasswordAuthenticationToken authToken =
-                            new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+                            new UsernamePasswordAuthenticationToken(email, null, authorities); // 👈 use email here
+
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
 
-                    // (Optional) Debug log
                     System.out.println("Authenticated user: " + email + " with role: " + role);
                 }
             }
