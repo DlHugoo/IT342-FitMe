@@ -26,8 +26,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()                         // Public login
                         .requestMatchers("/api/users/createUser").permitAll()               // Public registration
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")                  // Admin-only routes
-                        .requestMatchers("/api/user/**").hasAnyRole("ADMIN", "USER")        // Authenticated users
+                        .requestMatchers("/api/user/**").hasRole("USER")        // Authenticated users
                         .requestMatchers("/api/users/encode/**").permitAll() // 👈 Allow encoding
+                        .requestMatchers("/api/workouts/create", "/api/workouts/update/**", "/api/workouts/delete/**").hasRole("ADMIN")
+                        .requestMatchers("/api/workouts/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
