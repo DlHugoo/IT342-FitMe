@@ -23,17 +23,16 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/users/createUser").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN") // 👑 Only admins
-                        .requestMatchers("/api/user/**").hasAnyRole("ADMIN", "USER") // 👥 Both
+                        .requestMatchers("/api/auth/**").permitAll()                         // Public login
+                        .requestMatchers("/api/users/createUser").permitAll()               // Public registration
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")                  // Admin-only routes
+                        .requestMatchers("/api/user/**").hasAnyRole("ADMIN", "USER")        // Authenticated users
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {

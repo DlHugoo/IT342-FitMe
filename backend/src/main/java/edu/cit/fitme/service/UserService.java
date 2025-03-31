@@ -29,15 +29,15 @@ public class UserService {
     }
 
     public UserEntity createUser(UserEntity user) {
-        // ✅ Set default role if none provided
+        // Set default role if not provided
         String role = user.getRole();
         if (role == null || role.isEmpty()) {
-            user.setRole("USER");
-        } else if (!role.equalsIgnoreCase("ADMIN") && !role.equalsIgnoreCase("USER")) {
-            throw new IllegalArgumentException("Invalid role. Allowed roles: ADMIN, USER.");
+            user.setRole("user");
+        } else if (!role.equalsIgnoreCase("admin") && !role.equalsIgnoreCase("user")) {
+            throw new IllegalArgumentException("Invalid role. Allowed roles: admin, user.");
         }
 
-        // ✅ Hash the password before saving
+        // Hash the password before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
@@ -48,9 +48,10 @@ public class UserService {
 
     public Optional<UserEntity> updateUser(Long id, UserEntity updatedUser) {
         return userRepository.findById(id).map(user -> {
-            user.setFirstName(updatedUser.getFirstName());
-            user.setLastName(updatedUser.getLastName());
+            user.setUsername(updatedUser.getUsername());
             user.setEmail(updatedUser.getEmail());
+            user.setWeight(updatedUser.getWeight());
+            user.setHeight(updatedUser.getHeight());
 
             if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
                 user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));

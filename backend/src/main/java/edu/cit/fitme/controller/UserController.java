@@ -22,6 +22,7 @@ public class UserController {
 
     @PostMapping("/createUser")
     public UserEntity createUser(@RequestBody UserEntity user) {
+
         return userService.createUser(user);
     }
 
