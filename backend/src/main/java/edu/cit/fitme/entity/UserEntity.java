@@ -30,10 +30,13 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private String role; // 'admin' or 'user'
 
-    @Column(nullable = true)
+    @Column
+    private Integer age; // ✅ New field
+
+    @Column
     private Float weight;
 
-    @Column(nullable = true)
+    @Column
     private Float height;
 
     // ===== UserDetails methods and other logic remain unchanged ===== //
@@ -74,6 +77,14 @@ public class UserEntity implements UserDetails {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Integer getAge() { // ✅ Getter
+        return age;
+    }
+
+    public void setAge(Integer age) { // ✅ Setter
+        this.age = age;
     }
 
     public Float getWeight() {

@@ -29,12 +29,10 @@ public class UserService {
     }
 
     public UserEntity createUser(UserEntity user) {
-        // 🔒 Always force the role to 'user'
-        user.setRole("user");
+        user.setRole("user"); // 🔒 Force default role
+        user.setPassword(passwordEncoder.encode(user.getPassword())); // ✅ Encode password
 
-        // ✅ Hash password
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
+        // ✅ Save age as part of user creation
         return userRepository.save(user);
     }
 
@@ -48,6 +46,7 @@ public class UserService {
             user.setEmail(updatedUser.getEmail());
             user.setWeight(updatedUser.getWeight());
             user.setHeight(updatedUser.getHeight());
+            user.setAge(updatedUser.getAge()); // ✅ Add this line
 
             if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
                 user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
