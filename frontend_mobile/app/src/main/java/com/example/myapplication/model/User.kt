@@ -6,6 +6,7 @@ data class User(
     val email: String,
     val password: String? = null,  // Optional to avoid exposing it unnecessarily
     val role: String,
+    val age: Int? = null,
     val weight: Float? = null,
     val height: Float? = null
 )
