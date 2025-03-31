@@ -40,20 +40,15 @@ public class UserService {
         return passwordEncoder.matches(raw, encoded);
     }
 
-    public Optional<UserEntity> updateUser(Long id, UserEntity updatedUser) {
-        return userRepository.findById(id).map(user -> {
+    public Optional<UserEntity> updateOwnProfile(String email, UserEntity updatedUser) {
+        return userRepository.findByEmail(email).map(user -> {
             user.setUsername(updatedUser.getUsername());
-            user.setEmail(updatedUser.getEmail());
             user.setWeight(updatedUser.getWeight());
             user.setHeight(updatedUser.getHeight());
-            user.setAge(updatedUser.getAge()); // ✅ Add this line
+            user.setAge(updatedUser.getAge());
 
             if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
                 user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
-            }
-
-            if (updatedUser.getRole() != null) {
-                user.setRole(updatedUser.getRole());
             }
 
             return userRepository.save(user);
