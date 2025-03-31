@@ -2,12 +2,16 @@ package edu.cit.fitme.controller;
 
 import edu.cit.fitme.entity.UserEntity;
 import edu.cit.fitme.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     private final UserService userService;
     public UserController(UserService userService){
         this.userService=userService;
@@ -37,6 +41,11 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/encode/{rawPassword}")
+    public String encodePassword(@PathVariable String rawPassword) {
+        return passwordEncoder.encode(rawPassword);
     }
 }
 

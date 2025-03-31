@@ -29,16 +29,12 @@ public class UserService {
     }
 
     public UserEntity createUser(UserEntity user) {
-        // Set default role if not provided
-        String role = user.getRole();
-        if (role == null || role.isEmpty()) {
-            user.setRole("user");
-        } else if (!role.equalsIgnoreCase("admin") && !role.equalsIgnoreCase("user")) {
-            throw new IllegalArgumentException("Invalid role. Allowed roles: admin, user.");
-        }
+        // 🔒 Always force the role to 'user'
+        user.setRole("user");
 
-        // Hash the password before saving
+        // ✅ Hash password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         return userRepository.save(user);
     }
 
