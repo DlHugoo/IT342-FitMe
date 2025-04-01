@@ -37,8 +37,8 @@ const FitmeLandingPage = () => {
               Workouts
             </a>
             <a
-              href="#login"
-              className="text-gray-700 hover:text-fitme-blue transition-colors"
+              onClick={() => navigate("/login")}
+              className="text-gray-700 hover:text-fitme-blue transition-colors cursor-pointer"
             >
               Login
             </a>
