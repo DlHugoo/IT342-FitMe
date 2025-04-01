@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"> <!-- Ensures buttons are centered in parent -->
+
+    <LinearLayout
+        android:layout_width="320dp"
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="@drawable/button_bg_pressed"
+        android:gravity="center"
+        android:layout_margin="8dp"> <!-- Adds spacing between each item -->
+
+        <TextView
+            android:id="@+id/tvDay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Day 1"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/tvRest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rest"
+            android:textSize="16sp"
+            android:textColor="@color/blue"
+            android:visibility="gone"
+            android:layout_marginEnd="12dp"/>
+
+        <ImageView
+            android:id="@+id/checkIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_check"
+            android:visibility="visible"/>
+    </LinearLayout>
+
+</LinearLayout>
