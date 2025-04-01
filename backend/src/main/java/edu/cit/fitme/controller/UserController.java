@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -17,6 +18,13 @@ public class UserController {
     private final UserService userService;
     public UserController(UserService userService){
         this.userService=userService;
+    }
+
+    // ✅ View all users
+    // Only accessible by ADMIN
+    @GetMapping("/admin/all")
+    public List<UserEntity> getAllUsers() {
+        return userService.getAllUsers();
     }
 
     @GetMapping("/getUserById/{id}")
@@ -40,7 +48,7 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/deleteUser/{id}")
+    @DeleteMapping("/admin/deleteUser/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
