@@ -24,11 +24,12 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()                         // Public login
+                        .requestMatchers("/api/users/encode/**").permitAll() // 👈 Allow encoding
                         .requestMatchers("/api/users/createUser").permitAll()               // Public registration
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")                  // Admin-only routes
                         .requestMatchers("/api/users/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/users/**").hasAnyRole("USER", "ADMIN")       // Authenticated users
-                        .requestMatchers("/api/users/encode/**").permitAll() // 👈 Allow encoding
+
 
                         //Workout
                         .requestMatchers("/api/workouts/create", "/api/workouts/update/**", "/api/workouts/delete/**").hasRole("ADMIN")
