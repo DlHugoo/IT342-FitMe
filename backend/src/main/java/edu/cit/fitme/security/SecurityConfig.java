@@ -26,7 +26,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()                         // Public login
                         .requestMatchers("/api/users/createUser").permitAll()               // Public registration
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")                  // Admin-only routes
-                        .requestMatchers("/api/user/**").hasRole("USER")        // Authenticated users
+                        .requestMatchers("/api/users/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/users/**").hasAnyRole("USER", "ADMIN")       // Authenticated users
                         .requestMatchers("/api/users/encode/**").permitAll() // 👈 Allow encoding
 
                         //Workout
