@@ -1,6 +1,7 @@
 package edu.cit.fitme.controller;
 
 import edu.cit.fitme.entity.WorkoutDayEntity;
+import edu.cit.fitme.entity.WorkoutEntity;
 import edu.cit.fitme.service.WorkoutDayService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,11 @@ public class WorkoutDayController {
 
     public WorkoutDayController(WorkoutDayService workoutDayService) {
         this.workoutDayService = workoutDayService;
+    }
+
+    @GetMapping
+    public List<WorkoutDayEntity> getAllWorkoutDays() {
+        return workoutDayService.getAllDays(); // <- make sure this method exists
     }
 
     @GetMapping("/workout/{workoutId}")

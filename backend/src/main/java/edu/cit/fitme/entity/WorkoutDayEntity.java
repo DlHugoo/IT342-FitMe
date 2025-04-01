@@ -13,12 +13,17 @@ public class WorkoutDayEntity {
 
     private int dayNumber;
 
+    @Column(name = "is_rest_day")
+    private boolean isRestDay; // ✅ Added rest day flag
+
     @ManyToOne
     @JoinColumn(name = "workout_id")
     private WorkoutEntity workout;
 
     @OneToMany(mappedBy = "workoutDay", cascade = CascadeType.ALL)
     private List<WorkoutDayExerciseEntity> exercises;
+
+    // ====== Getters and Setters ======
 
     public Long getDayId() {
         return dayId;
@@ -36,6 +41,14 @@ public class WorkoutDayEntity {
         this.dayNumber = dayNumber;
     }
 
+    public boolean isRestDay() {
+        return isRestDay;
+    }
+
+    public void setRestDay(boolean restDay) {
+        isRestDay = restDay;
+    }
+
     public WorkoutEntity getWorkout() {
         return workout;
     }
@@ -51,6 +64,4 @@ public class WorkoutDayEntity {
     public void setExercises(List<WorkoutDayExerciseEntity> exercises) {
         this.exercises = exercises;
     }
-
-    // Getters and setters
 }
