@@ -29,19 +29,19 @@ public class WorkoutController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public WorkoutEntity createWorkout(@RequestBody WorkoutEntity workout) {
         return workoutService.createWorkout(workout);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<WorkoutEntity> updateWorkout(@PathVariable Long id, @RequestBody WorkoutEntity workout) {
         return workoutService.updateWorkout(id, workout)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteWorkout(@PathVariable Long id) {
         workoutService.deleteWorkout(id);
         return ResponseEntity.noContent().build();
