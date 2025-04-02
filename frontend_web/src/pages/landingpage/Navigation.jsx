@@ -9,7 +9,10 @@ const Navigation = () => {
       {/* Header */}
       <header className="sticky top-0 bg-white z-10">
         <div className="container mx-auto px-36 py-4 flex items-center">
-          <div className="flex items-center mr-auto">
+          <div
+            className="flex items-center mr-auto cursor-pointer"
+            onClick={() => navigate("/")}
+          >
             {/* Logo */}
             <img src={FitmeLogo} alt="Fitme Logo" className="h-10 w-10 mr-2" />
             <div className="text-3xl font-bold text-fitme-blue mr-auto">
@@ -20,14 +23,14 @@ const Navigation = () => {
           {/* Navigation - Desktop */}
           <nav className="hidden md:flex space-x-6 mr-6">
             <a
-              href="#about"
-              className="text-gray-700 hover:text-fitme-blue transition-colors"
+              onClick={() => navigate("/aboutus")}
+              className="text-gray-700 hover:text-fitme-blue transition-colors cursor-pointer"
             >
               About Us
             </a>
             <a
               onClick={() => navigate("/download")}
-              className="text-gray-700 hover:text-fitme-blue transition-colors"
+              className="text-gray-700 hover:text-fitme-blue transition-colors cursor-pointer"
             >
               Download
             </a>
@@ -69,20 +72,20 @@ const Navigation = () => {
         {/* Mobile Menu */}
         <div className="hidden md:hidden px-4 py-2 bg-gray-50">
           <a
-            href="#about"
-            className="block py-2 text-gray-700 hover:text-fitme-blue"
+            onClick={() => navigate("/aboutus")}
+            className="block py-2 text-gray-700 hover:text-fitme-blue cursor-pointer"
           >
             About Us
           </a>
           <a
             onClick={() => navigate("/download")}
-            className="block py-2 text-gray-700 hover:text-fitme-blue"
+            className="block py-2 text-gray-700 hover:text-fitme-blue cursor-pointer"
           >
             Download
           </a>
           <a
             onClick={() => navigate("/login")}
-            className="block py-2 text-gray-700 hover:text-fitme-blue"
+            className="block py-2 text-gray-700 hover:text-fitme-blue cursor-pointer"
           >
             Login
           </a>

@@ -9,6 +9,7 @@ export default {
       colors: {
         'fitme-blue': '#39B7FF',
         'fitme-blue-hover': '#4DBEFF',
+        'blue-footer': '#1174CB',
       }
     },
   },
