@@ -43,7 +43,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             if (jwtUtil.validateToken(token)) {
-                String role = jwtUtil.extractRole(token); // Extract role from JWT
+                String role = jwtUtil.extractRole(token);
                 var userDetails = userRepository.findByEmail(email).orElse(null);
 
                 if (userDetails != null) {
@@ -52,16 +52,21 @@ public class JwtFilter extends OncePerRequestFilter {
                     );
 
                     UsernamePasswordAuthenticationToken authToken =
-                            new UsernamePasswordAuthenticationToken(email, null, authorities); // 👈 use email here
+                            new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
 
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
 
-                    System.out.println("Authenticated user: " + email + " with role: " + role);
+                    System.out.println("✅ Authenticated user: " + email + " with role: " + role);
                 }
             }
         }
 
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            System.out.println("❌ Authentication failed or missing token.");
+        }
+
         filterChain.doFilter(request, response);
     }
+
 }
