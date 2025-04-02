@@ -7,7 +7,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const [formValues, setFormValues] = useState({
-    identifier: "", // email or username
+    email: "", // email or username
     password: "",
   });
 
@@ -28,7 +28,7 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post("/api/auth/login", {
-        email: formValues.identifier,
+        email: formValues.email,
         password: formValues.password,
       });
 
@@ -68,7 +68,7 @@ const LoginPage = () => {
             <input
               name="email"
               type="text"
-              value={formValues.identifier}
+              value={formValues.email}
               onChange={handleInputChange}
               placeholder="Enter Email"
               className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
