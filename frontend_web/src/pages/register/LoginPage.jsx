@@ -151,7 +151,7 @@ const LoginPage = () => {
         <p className="text-gray-600">
           New to Fitme?
           <a
-            onClick={() => navigate("/register")}
+            onClick={() => navigate("/download")}
             href="#"
             className="text-blue-500 ml-1 font-medium"
           >
