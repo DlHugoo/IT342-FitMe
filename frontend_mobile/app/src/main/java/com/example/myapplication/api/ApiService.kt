@@ -5,45 +5,65 @@ import retrofit2.Call
 import retrofit2.http.*
 
 data class LoginRequest(
-    val email: String,   // Must match backend DTO
-    val password: String // Must match backend DTO
+    val email: String,
+    val password: String
 )
 
 data class LoginResponse(
-    val token: String,    // JWT token
-    val userId: Long,     // User ID
-    val email: String,    // User's email
-    val role: String      // User's role ('admin' or 'user')
+    val token: String,
+    val userId: Long,
+    val email: String,
+    val role: String
 )
 
 interface ApiService {
 
-    // Get user by ID (Include Authorization header)
-    @GET("/api/users/getUserById/{id}")
+    // ✅ Login (still AuthController, unchanged)
+    @POST("/api/login")
+    fun loginUser(@Body request: LoginRequest): Call<LoginResponse>
+
+    // ✅ Get all users (Admin only)
+    @GET("/api/users")
+    fun getAllUsers(
+        @Header("Authorization") token: String
+    ): Call<List<User>>
+
+    // ✅ Get user by ID
+    @GET("/api/users/{id}")
     fun getUserById(
         @Path("id") id: Long,
         @Header("Authorization") token: String
     ): Call<User>
 
-    @POST("/api/auth/login") // Correct endpoint for AuthController
-    fun loginUser(@Body request: LoginRequest): Call<LoginResponse>
-
-    // Create a new user
-    @POST("/api/users/createUser")
+    // ✅ Create new user
+    @POST("/api/users")
     fun createUser(@Body user: User): Call<User>
 
-    @PUT("/api/users/updateProfile")
+    // ✅ Users update their own profile (email extracted from JWT on server side)
+    @PUT("/api/users")
     fun updateOwnProfile(
-        @Header("Authorization") token: String,  // Add token as header
+        @Header("Authorization") token: String,
         @Body user: User
     ): Call<User>
 
-    // Delete a user by ID
-    @DELETE("/api/users/deleteUser/{id}")
-    fun deleteUser(@Path("id") id: Long): Call<Void>
+    // ✅ Admin updates a specific user by ID
+    @PUT("/api/users/{id}")
+    fun updateUserByAdmin(
+        @Path("id") id: Long,
+        @Header("Authorization") token: String,
+        @Body user: User
+    ): Call<User>
 
-    // Encode a password
+    // ✅ Delete user by ID
+    @DELETE("/api/users/{id}")
+    fun deleteUser(
+        @Path("id") id: Long,
+        @Header("Authorization") token: String
+    ): Call<Void>
+
+    // ✅ Encode password (for testing/admin use)
     @GET("/api/users/encode/{rawPassword}")
-    fun encodePassword(@Path("rawPassword") rawPassword: String): Call<String>
-
+    fun encodePassword(
+        @Path("rawPassword") rawPassword: String
+    ): Call<String>
 }
