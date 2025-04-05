@@ -85,6 +85,13 @@ class HomePageActivity : AppCompatActivity() {
                         descTextView.text = workout.title
                         imageView.setImageResource(getImageForDifficulty(workout.difficulty))
 
+                        // ⭐ Add click listener to card to open WorkoutsActivity
+                        cardView.setOnClickListener {
+                            val intent = Intent(this@HomePageActivity, WorkoutsActivity::class.java)
+                            intent.putExtra("workout", workout)  // 'workout' is your Workout object
+                            startActivity(intent)
+                        }
+
                         // Add the workout card to the container
                         workoutContainer.addView(cardView)
                     }

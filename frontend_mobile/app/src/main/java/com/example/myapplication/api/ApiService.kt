@@ -2,6 +2,7 @@ package com.example.myapplication.api
 
 import com.example.myapplication.model.User
 import com.example.myapplication.model.Workout
+import com.example.myapplication.model.WorkoutDay
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -70,5 +71,10 @@ interface ApiService {
 
     @GET("/api/workouts")
     fun getAllWorkouts( @Header("Authorization") token: String): Call<List<Workout>>
+
+    @GET("api/workout-days/{workoutId}")
+    suspend fun getWorkoutDays(@Path("workoutId") workoutId: Long): List<WorkoutDay>
+
+
 
 }
