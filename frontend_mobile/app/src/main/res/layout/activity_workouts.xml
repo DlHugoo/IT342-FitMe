@@ -1,14 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/workoutDays"
+    android:id="@+id/workouts"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".WorkoutDaysActivity">
+    tools:context=".WorkoutsActivity">
 
-    <!-- Logo and App Name -->
+    <!-- Header -->
     <LinearLayout
         android:id="@+id/header_layout"
         android:layout_width="wrap_content"
@@ -36,16 +35,14 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- Easy Card -->
+    <!-- Workout Header Card -->
     <LinearLayout
-        android:id="@+id/easy_card"
+        android:id="@+id/workout_card"
         android:layout_width="360dp"
         android:layout_height="200dp"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp"
         android:background="@drawable/button_bg"
-        android:clickable="true"
-        android:focusable="true"
         android:orientation="horizontal"
         android:padding="0dp"
         android:layout_below="@id/header_layout"
@@ -59,47 +56,44 @@
             android:padding="15dp">
 
             <TextView
-                android:id="@+id/easy_title"
+                android:id="@+id/difficulty_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Easy"
+                android:text="Workout Title"
                 android:textColor="#000000"
                 android:textSize="25sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/easy_desc"
+                android:id="@+id/difficulty_desc"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:text="Loose Belly Fat"
+                android:text="Workout Description"
                 android:textColor="#FFFFFF"
                 android:textSize="35sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/easy_image"
+            android:id="@+id/difficulty_image"
             android:layout_width="180dp"
             android:layout_height="300dp"
             android:layout_gravity="center_vertical"
             android:src="@drawable/easy_image" />
     </LinearLayout>
 
-
-    <!-- Bottom Navigation Bar -->
-
+    <!-- List of Workout Days -->
     <ListView
         android:id="@+id/listViewDays"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_above="@id/bottom_nav"
-        android:layout_below="@id/easy_card"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp"
+        android:layout_below="@id/workout_card"
         android:divider="@null"
         android:dividerHeight="15dp"
         android:paddingHorizontal="30dp" />
 
+    <!-- Bottom Nav -->
     <LinearLayout
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
@@ -109,14 +103,12 @@
         android:elevation="8dp"
         android:orientation="horizontal">
 
-        <!-- Home Button -->
+        <!-- Home -->
         <LinearLayout
             android:id="@+id/nav_home"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:clickable="true"
-            android:focusable="true"
             android:gravity="center">
 
             <ImageView
@@ -125,14 +117,12 @@
                 android:src="@drawable/ic_home" />
         </LinearLayout>
 
-        <!-- Stats Button -->
+        <!-- Stats -->
         <LinearLayout
             android:id="@+id/nav_stats"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:clickable="true"
-            android:focusable="true"
             android:gravity="center">
 
             <ImageView
@@ -141,14 +131,12 @@
                 android:src="@drawable/ic_calendar" />
         </LinearLayout>
 
-        <!-- Profile Button -->
+        <!-- Profile -->
         <LinearLayout
             android:id="@+id/nav_profile"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:clickable="true"
-            android:focusable="true"
             android:gravity="center">
 
             <ImageView
