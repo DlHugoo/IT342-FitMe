@@ -9,12 +9,12 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.myapplication.adapter.DayAdapter
 import com.example.myapplication.model.WorkoutDays
 
-class WorkoutDaysActivity : AppCompatActivity() {
+class WorkoutsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_workout_days)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.workoutDays)) { v, insets ->
+        setContentView(R.layout.activity_workouts)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.workouts)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
