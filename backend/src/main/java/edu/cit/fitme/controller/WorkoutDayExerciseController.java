@@ -17,24 +17,24 @@ public class WorkoutDayExerciseController {
         this.service = service;
     }
 
-    @GetMapping("/day/{dayId}")
+    @GetMapping("/{dayId}")
     public List<WorkoutDayExerciseEntity> getByDayId(@PathVariable Long dayId) {
         return service.getExercisesByDayId(dayId);
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public WorkoutDayExerciseEntity create(@RequestBody WorkoutDayExerciseEntity data) {
         return service.create(data);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<WorkoutDayExerciseEntity> update(@PathVariable Long id, @RequestBody WorkoutDayExerciseEntity data) {
         return service.update(id, data)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
