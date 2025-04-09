@@ -153,7 +153,7 @@ const RegisterPage = () => {
       };
 
       // Call your backend API to create a user
-      const response = await axios.post("/api/users/createUser", userData);
+      const response = await axios.post("/api/users", userData);
 
       console.log("User created successfully:", response.data);
 

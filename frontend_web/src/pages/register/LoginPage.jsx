@@ -27,19 +27,21 @@ const LoginPage = () => {
     setError(null);
 
     try {
-      const response = await axios.post("/api/auth/login", {
+      const response = await axios.post("/api/login", {
         email: formValues.email,
         password: formValues.password,
       });
 
-      // Assume the response contains a JWT or user info
-      const { token } = response.data;
+      const { token, role } = response.data;
 
-      // Save token to localStorage or context
       localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
 
-      // Navigate to home on success
-      navigate("/");
+      if (role === "admin") {
+        navigate("/user");
+      } else {
+        navigate("/download");
+      }
     } catch (err) {
       setError("Invalid credentials. Please try again.");
       console.error("Login error:", err);
@@ -151,7 +153,7 @@ const LoginPage = () => {
         <p className="text-gray-600">
           New to Fitme?
           <a
-            onClick={() => navigate("/download")}
+            onClick={() => navigate("/register")}
             href="#"
             className="text-blue-500 ml-1 font-medium"
           >

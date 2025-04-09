@@ -10,6 +10,8 @@ export default {
         'fitme-blue': '#39B7FF',
         'fitme-blue-hover': '#4DBEFF',
         'blue-footer': '#1174CB',
+        'blue-header': '#0087C9',
+        'blue-header2': '#1798DE',
       }
     },
   },
