@@ -33,6 +33,12 @@ class WorkoutsActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val navstats: LinearLayout = findViewById(R.id.nav_stats)
+        navstats.setOnClickListener {
+            val intent = Intent(this, StatsPageActivity::class.java)
+            startActivity(intent)
+        }
+
         // Profile navigation
         val navprofile: LinearLayout = findViewById(R.id.nav_profile)
         navprofile.setOnClickListener {
