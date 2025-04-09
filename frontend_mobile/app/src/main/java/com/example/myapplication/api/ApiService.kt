@@ -18,6 +18,10 @@ data class LoginResponse(
     val role: String
 )
 
+data class WeightUpdateRequest(
+    val weight: Double
+)
+
 interface ApiService {
 
     // ✅ Login (still AuthController, unchanged)
@@ -75,6 +79,11 @@ interface ApiService {
     @GET("api/workout-days/{workoutId}")
     suspend fun getWorkoutDays(@Path("workoutId") workoutId: Long): List<WorkoutDay>
 
-
+    // ✅ Update weight (for logged-in user, uses JWT token)
+    @PATCH("/api/users/weight")
+    fun updateWeight(
+        @Header("Authorization") token: String,
+        @Body request: WeightUpdateRequest
+    ): Call<User>
 
 }

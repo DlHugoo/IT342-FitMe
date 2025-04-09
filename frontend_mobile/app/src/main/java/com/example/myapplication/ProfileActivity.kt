@@ -67,6 +67,12 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val navstats: LinearLayout = findViewById(R.id.nav_stats)
+        navstats.setOnClickListener {
+            val intent = Intent(this, StatsPageActivity::class.java)
+            startActivity(intent)
+        }
+
         // Load user profile data
         loadUserProfile()
 

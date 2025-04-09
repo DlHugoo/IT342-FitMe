@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/statspage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#FFFFFF">
+
+    <!-- Scrollable Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_nav">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <!-- Logo and App Name -->
+            <LinearLayout
+                android:id="@+id/header_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <ImageView
+                    android:id="@+id/logo"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/fitme_logo" />
+
+                <TextView
+                    android:id="@+id/app_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="FITME"
+                    android:textColor="#007BFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- 📅 Calendar Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#E1F0FB"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:id="@+id/tv_calendar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Calendar"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#007AFF"
+                    android:layout_gravity="center_horizontal"
+                    android:paddingBottom="8dp" />
+
+                <CalendarView
+                    android:id="@+id/calendar_view"
+                    android:layout_width="350dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"/>
+            </LinearLayout>
+
+            <!-- ⚖️ Weight Section -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp">
+
+                <TextView
+                    android:id="@+id/tv_weight_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Weight (kg)"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/blue" />
+
+                <Button
+                    android:id="@+id/btn_edit_weight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Edit"
+                    android:textSize="14sp"
+                    android:background="@drawable/button_selector"
+                    app:backgroundTint="@null"
+                    android:textColor="#FFFFFF"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:weightSum="3"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:paddingHorizontal="8dp">
+
+                <!-- Lightest -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="@drawable/button_bg_pressed"
+                    android:padding="12dp"
+                    android:layout_margin="4dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/tv_lightest_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="73"
+                        android:textSize="20sp"
+                        android:textColor="#1E1E1E"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/tv_lightest_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Lightest"
+                        android:textSize="14sp"
+                        android:textColor="#1E1E1E"/>
+                </LinearLayout>
+
+                <!-- Current -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="@drawable/button_bg_pressed"
+                    android:padding="12dp"
+                    android:layout_margin="4dp"
+                    android:gravity="center">
+
+                    <EditText
+                        android:id="@+id/tv_current_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:inputType="numberDecimal"
+                        android:text="74"
+                        android:textSize="25sp"
+                        android:textColor="#1E1E1E"
+                        android:textStyle="bold"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/tv_current_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Current"
+                        android:textSize="14sp"
+                        android:textColor="#1E1E1E"/>
+                </LinearLayout>
+
+                <!-- Heaviest -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="@drawable/button_bg_pressed"
+                    android:padding="12dp"
+                    android:layout_margin="4dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/tv_heaviest_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="76"
+                        android:textSize="20sp"
+                        android:textColor="#1E1E1E"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/tv_heaviest_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Heaviest"
+                        android:textSize="14sp"
+                        android:textColor="#1E1E1E"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 📈 Line Graph (Weight Progression) -->
+
+            <!-- 📊 BMI Section -->
+            <com.example.myapplication.component.CustomLineChart
+                android:id="@+id/weight_line_chart"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:id="@+id/tv_bmi_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BMI (kg/m²)"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/blue"
+                android:paddingBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:gravity="center"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="8dp"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="#E1F0FB"
+                android:clipToPadding="false"
+                android:background="@drawable/button_bg_pressed">
+
+                <TextView
+                    android:id="@+id/tv_bmi_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="26.3"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:textColor="#007AFF"/>
+
+                <TextView
+                    android:id="@+id/tv_bmi_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Overweight"
+                    android:textSize="20sp"
+                    android:textColor="#007AFF"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation Bar (Pinned) -->
+    <LinearLayout
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:elevation="8dp">
+
+        <!-- Home -->
+        <LinearLayout
+            android:id="@+id/nav_home"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_home" />
+        </LinearLayout>
+
+        <!-- Stats -->
+        <LinearLayout
+            android:id="@+id/nav_stats"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_calendar" />
+        </LinearLayout>
+
+        <!-- Profile -->
+        <LinearLayout
+            android:id="@+id/nav_profile"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_profile" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
