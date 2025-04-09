@@ -2,6 +2,7 @@ package edu.cit.fitme.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,30 +24,43 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()                         // Public login
-                        .requestMatchers("/api/users/encode/**").permitAll() // 👈 Allow encoding
-                        .requestMatchers("/api/users/createUser").permitAll()               // Public registration
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")                  // Admin-only routes
-                        .requestMatchers("/api/users/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/users/**").hasAnyRole("USER", "ADMIN")       // Authenticated users
 
+                        // 🔓 Public
+                        .requestMatchers("/api/users/encode/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/users").permitAll() // Registration
+                        .requestMatchers("/api/login").permitAll() // Login (if you use it)
 
-                        //Workout
-                        .requestMatchers("/api/workouts/create", "/api/workouts/update/**", "/api/workouts/delete/**").hasRole("ADMIN")
-                        .requestMatchers("/api/workouts/**").permitAll()
+                        // ✅ USERS
+                        .requestMatchers(HttpMethod.PUT, "/api/users").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/users/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/users/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/users/**").hasRole("ADMIN")
 
-                        // Exercise
-                        .requestMatchers("/api/exercises/create", "/api/exercises/update/**", "/api/exercises/delete/**").hasRole("ADMIN")
-                        .requestMatchers("/api/exercises/**").permitAll()
+                        // ✅ WORKOUTS
+                        .requestMatchers(HttpMethod.POST, "/api/workouts").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/workouts/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/workouts/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/workouts/**").hasAnyRole("ADMIN", "USER")
 
-                        // Workout Days
-                        .requestMatchers("/api/workout-days/create", "/api/workout-days/update/**", "/api/workout-days/delete/**").hasRole("ADMIN")
-                        .requestMatchers("/api/workout-days/**").permitAll()
+                        // ✅ EXERCISES
+                        .requestMatchers(HttpMethod.POST, "/api/exercises").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/exercises/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/exercises/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/exercises/**").hasAnyRole("ADMIN", "USER")
 
-                        // Day Exercises
-                        .requestMatchers("/api/day-exercises/create", "/api/day-exercises/update/**", "/api/day-exercises/delete/**").hasRole("ADMIN")
-                        .requestMatchers("/api/day-exercises/**").permitAll()
+                        // ✅ WORKOUT DAYS
+                        .requestMatchers(HttpMethod.GET, "/api/workout-days/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.POST, "/api/workout-days").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/workout-days/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/workout-days/**").hasRole("ADMIN")
 
+                        // ✅ WORKOUT DAY EXERCISES
+                        .requestMatchers(HttpMethod.GET, "/api/day-exercises/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.POST, "/api/day-exercises").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/day-exercises/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/day-exercises/**").hasRole("ADMIN")
+
+                        // ✅ Catch-all for secured routes
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

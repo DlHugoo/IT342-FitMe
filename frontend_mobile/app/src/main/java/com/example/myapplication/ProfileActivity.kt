@@ -26,6 +26,8 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var ageInput: EditText
     private lateinit var heightInput: EditText
     private lateinit var btnEdit: Button
+    private lateinit var btnLogout: Button
+
 
     private var isEditMode = false
     private var currentUser: User? = null
@@ -47,6 +49,7 @@ class ProfileActivity : AppCompatActivity() {
         ageInput = findViewById(R.id.ageInput)
         heightInput = findViewById(R.id.heightInput)
         btnEdit = findViewById(R.id.btn_edit)
+        btnLogout= findViewById(R.id.btn_logout)
 
         val btnBack: ImageView = findViewById(R.id.btn_back)
 
@@ -82,6 +85,11 @@ class ProfileActivity : AppCompatActivity() {
                 isEditMode = true
             }
         }
+
+        btnLogout.setOnClickListener {
+            logoutUser()
+        }
+
     }
 
     private fun loadUserProfile() {
@@ -184,4 +192,20 @@ class ProfileActivity : AppCompatActivity() {
         ageInput.isEnabled = isEditable
         heightInput.isEnabled = isEditable
     }
+
+    private fun logoutUser() {
+        val sharedPref = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            remove("token") // Remove the stored token
+            remove("userId") // Remove the stored user ID
+            apply() // Apply changes
+        }
+
+        // Navigate to LoginActivity and clear the back stack
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+    }
+
 }

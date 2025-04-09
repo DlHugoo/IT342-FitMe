@@ -31,8 +31,6 @@ public class UserService {
     public UserEntity createUser(UserEntity user) {
         user.setRole("user"); // 🔒 Force default role
         user.setPassword(passwordEncoder.encode(user.getPassword())); // ✅ Encode password
-
-        // ✅ Save age as part of user creation
         return userRepository.save(user);
     }
 
@@ -40,7 +38,11 @@ public class UserService {
         return passwordEncoder.matches(raw, encoded);
     }
 
+    // ✅ USER updates own profile (no role)
     public Optional<UserEntity> updateOwnProfile(String email, UserEntity updatedUser) {
+
+        System.out.println("🔍 [SERVICE] Attempting to find user with email: " + email); // ✅ Step 2
+
         return userRepository.findByEmail(email).map(user -> {
             user.setUsername(updatedUser.getUsername());
             user.setWeight(updatedUser.getWeight());
@@ -55,7 +57,29 @@ public class UserService {
         });
     }
 
+    // ✅ ADMIN updates any user (including role)
+    public Optional<UserEntity> updateUserByAdmin(Long id, UserEntity updatedUser) {
+        return userRepository.findById(id).map(user -> {
+            user.setUsername(updatedUser.getUsername());
+            user.setWeight(updatedUser.getWeight());
+            user.setHeight(updatedUser.getHeight());
+            user.setAge(updatedUser.getAge());
+            user.setEmail(updatedUser.getEmail()); // if editable
+
+            if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+                user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+            }
+
+            if (updatedUser.getRole() != null && !updatedUser.getRole().isEmpty()) {
+                user.setRole(updatedUser.getRole());
+            }
+
+            return userRepository.save(user);
+        });
+    }
+
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
 }
+

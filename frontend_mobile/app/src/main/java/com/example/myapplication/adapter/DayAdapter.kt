@@ -8,10 +8,10 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.myapplication.R
-import com.example.myapplication.model.WorkoutDays
+import com.example.myapplication.model.WorkoutDay
 
-class DayAdapter(private val context: Context, private val days: List<WorkoutDays>) :
-    ArrayAdapter<WorkoutDays>(context, 0, days) {
+class DayAdapter(private val context: Context, private val days: List<WorkoutDay>) :
+    ArrayAdapter<WorkoutDay>(context, 0, days) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.item_day, parent, false)
@@ -36,5 +36,8 @@ class DayAdapter(private val context: Context, private val days: List<WorkoutDay
         }
 
         return view
+
     }
 }
+
+
