@@ -1,5 +1,6 @@
 package edu.cit.fitme.controller;
 
+import edu.cit.fitme.dto.WeightUpdateRequest;
 import edu.cit.fitme.entity.UserEntity;
 import edu.cit.fitme.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,17 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserEntity> updateUserByAdmin(@PathVariable Long id, @RequestBody UserEntity updatedUser) {
         return userService.updateUserByAdmin(id, updatedUser)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PatchMapping("/weight")
+    public ResponseEntity<UserEntity> updateWeight(@RequestBody WeightUpdateRequest request, Principal principal) {
+        UserEntity loggedInUser = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        String email = loggedInUser.getEmail();
+        System.out.println("📨 Email from token (extracted from principal): " + email);
+
+        return userService.updateWeight(email, request.getWeight())
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

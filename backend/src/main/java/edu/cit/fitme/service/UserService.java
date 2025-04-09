@@ -78,6 +78,17 @@ public class UserService {
         });
     }
 
+    public Optional<UserEntity> updateWeight(String email, double newWeight) {
+        System.out.println("🔍 Looking for user by email: " + email);
+        return userRepository.findByEmail(email).map(user -> {
+            user.setWeight((float) newWeight);
+            return userRepository.save(user);
+
+        });
+
+    }
+
+
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
