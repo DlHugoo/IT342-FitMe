@@ -1,41 +1,49 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Sidebar from "../components/Sidebar";
-import UserWhiteIcon from "../../assets/user-white.png";
 import Headerbar from "../components/Headerbar";
+import UserWhiteIcon from "../../assets/user-white.png";
 
 const UserManagementPage = () => {
-  const [users, setUsers] = useState([
-    { id: 1, username: "BigDaddyDmun", email: "raymundlaude@cit.edu" },
-    { id: 2, username: "Khokak", email: "khokak@gmail.com" },
-    { id: 3, username: "Proffeseur", email: "johnmarlo@gmail.com" },
-    { id: 4, username: "Katheyismey", email: "kathmiguelle@gmail.com" },
-    { id: 5, username: "InvicibleMarc", email: "marcdotarot@gmail.com" },
-    { id: 5, username: "InvicibleMarc", email: "marcdotarot@gmail.com" },
-  ]);
+  const [users, setUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("/api/users", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setUsers(response.data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Sidebar Component */}
       <Sidebar />
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        {/* Header */}
         <Headerbar />
 
-        {/* Tabs */}
         <div className="bg-blue-header2 text-white px-4 pb-0">
           <div className="inline-block px-4 py-2">Users</div>
         </div>
 
-        {/* Content */}
         <div className="flex-1 p-6">
-          {/* Search Bar */}
           <div className="mb-6 flex justify-center">
             <div className="relative w-96">
               <input
                 type="text"
                 placeholder="Search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full border border-gray-300 rounded p-2 pl-10"
               />
               <div className="absolute left-3 top-3 text-gray-400">
@@ -44,7 +52,6 @@ const UserManagementPage = () => {
             </div>
           </div>
 
-          {/* User Table */}
           <div className="bg-white rounded-md shadow">
             <table className="w-full">
               <thead>
@@ -56,21 +63,31 @@ const UserManagementPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {users.map((user) => (
-                  <tr key={user.id} className="border-t border-gray-200">
-                    <td className="py-3 px-4">{user.id}</td>
-                    <td className="py-3 px-4">{user.username}</td>
-                    <td className="py-3 px-4">{user.email}</td>
-                    <td className="py-3 px-4 flex space-x-2">
-                      <button className="text-fitme-blue">
-                        <EditIcon />
-                      </button>
-                      <button className="text-red-500">
-                        <DeleteIcon />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {users
+                  .filter(
+                    (user) =>
+                      user.username
+                        .toLowerCase()
+                        .includes(searchTerm.toLowerCase()) ||
+                      user.email
+                        .toLowerCase()
+                        .includes(searchTerm.toLowerCase())
+                  )
+                  .map((user) => (
+                    <tr key={user.id} className="border-t border-gray-200">
+                      <td className="py-3 px-4">{user.id}</td>
+                      <td className="py-3 px-4">{user.username}</td>
+                      <td className="py-3 px-4">{user.email}</td>
+                      <td className="py-3 px-4 flex space-x-2">
+                        <button className="text-fitme-blue">
+                          <EditIcon />
+                        </button>
+                        <button className="text-red-500">
+                          <DeleteIcon />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
@@ -80,7 +97,6 @@ const UserManagementPage = () => {
   );
 };
 
-// Icons for the main component
 const SearchIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
