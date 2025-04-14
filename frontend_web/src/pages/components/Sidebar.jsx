@@ -1,17 +1,27 @@
-import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import FitmeLogo from "../../assets/FitmeLogo.png";
 import UserIcon from "../../assets/user.png";
 import WorkoutSetIcon from "../../assets/workoutset.png";
 import ExerciseIcon from "../../assets/exercise.png";
 
 const Sidebar = () => {
-  const [activeItem, setActiveItem] = useState("User"); // Default active item
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Determine active item from current path
+  const getActiveItem = () => {
+    if (location.pathname.startsWith("/user")) return "User";
+    if (location.pathname.startsWith("/workout-set")) return "Workout Set";
+    if (location.pathname.startsWith("/exercise")) return "Exercises";
+    return "";
+  };
+
+  const activeItem = getActiveItem();
 
   return (
     <div className="w-60 bg-white border-r border-gray-200 flex flex-col h-full">
       <div className="p-4 bg-white px-10 mb-5 mt-3">
         <div className="flex items-center cursor-pointer">
-          {/* Logo */}
           <img src={FitmeLogo} alt="Fitme Logo" className="h-10 w-10 mr-2" />
           <div className="text-3xl font-bold text-fitme-blue">FITME</div>
         </div>
@@ -22,7 +32,7 @@ const Sidebar = () => {
           icon={<img src={UserIcon} alt="User" className="h-6 w-6" />}
           text="User"
           active={activeItem === "User"}
-          onClick={() => setActiveItem("User")}
+          onClick={() => navigate("/user")}
         />
         <SidebarItem
           icon={
@@ -30,13 +40,13 @@ const Sidebar = () => {
           }
           text="Workout Set"
           active={activeItem === "Workout Set"}
-          onClick={() => setActiveItem("Workout Set")}
+          onClick={() => navigate("/workout-set")}
         />
         <SidebarItem
           icon={<img src={ExerciseIcon} alt="Exercises" className="h-6 w-6" />}
           text="Exercises"
           active={activeItem === "Exercises"}
-          onClick={() => setActiveItem("Exercises")}
+          onClick={() => navigate("/exercise")}
         />
       </div>
 
@@ -47,7 +57,6 @@ const Sidebar = () => {
   );
 };
 
-// Sidebar Item Component
 const SidebarItem = ({ icon, text, active, onClick }) => {
   return (
     <div
