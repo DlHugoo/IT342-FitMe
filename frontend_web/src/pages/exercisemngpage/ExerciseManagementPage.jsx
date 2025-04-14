@@ -10,6 +10,7 @@ const ExerciseManagementPage = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [exerciseToDelete, setExerciseToDelete] = useState(null);
+  const BASE_API_URL = import.meta.env.VITE_API_URL;
 
   const [formData, setFormData] = useState({
     name: "",
@@ -195,7 +196,7 @@ const ExerciseManagementPage = () => {
                               src={
                                 exercise.gifUrl.startsWith("http")
                                   ? exercise.gifUrl
-                                  : `http://localhost:8080${exercise.gifUrl}`
+                                  : `${BASE_API_URL}${exercise.gifUrl}`
                               }
                               alt="Exercise GIF"
                               className="object-contain w-full h-full"
@@ -253,7 +254,11 @@ const ExerciseManagementPage = () => {
           />
           {formData.gifUrl && (
             <img
-              src={formData.gifUrl}
+              src={
+                formData.gifUrl.startsWith("http")
+                  ? formData.gifUrl
+                  : `${BASE_API_URL}${formData.gifUrl}`
+              }
               alt="Preview"
               className="w-24 h-24 object-contain mb-4"
             />
@@ -287,7 +292,11 @@ const ExerciseManagementPage = () => {
           />
           {newExerciseData.gifUrl && (
             <img
-              src={newExerciseData.gifUrl}
+              src={
+                newExerciseData.gifUrl.startsWith("http")
+                  ? newExerciseData.gifUrl
+                  : `${BASE_API_URL}${newExerciseData.gifUrl}`
+              }
               alt="Preview"
               className="w-24 h-24 object-contain mb-4"
             />

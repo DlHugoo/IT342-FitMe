@@ -58,7 +58,7 @@ public class ExerciseController {
      * Upload a GIF file and return its accessible full URL.
      */
     @PostMapping("/upload-gif")
-    public ResponseEntity<String> uploadGif(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+    public ResponseEntity<String> uploadGif(@RequestParam("file") MultipartFile file) {
         try {
             // Set up the directory
             String uploadDir = "uploads/gifs";
@@ -76,10 +76,8 @@ public class ExerciseController {
             Path filePath = Paths.get(uploadDir).resolve(uniqueFileName);
             Files.write(filePath, file.getBytes());
 
-            // Construct full file URL
-            String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-            String fileUrl = baseUrl + "/uploads/gifs/" + uniqueFileName;
-
+            // Return the relative path only (suitable for frontend/mobile)
+            String fileUrl = "/uploads/gifs/" + uniqueFileName;
             return ResponseEntity.ok(fileUrl);
 
         } catch (IOException e) {
@@ -87,4 +85,5 @@ public class ExerciseController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Upload failed");
         }
     }
+
 }
