@@ -98,6 +98,37 @@ const ExerciseManagementPage = () => {
     }
   };
 
+  const handleGifUpload = async (e, isEdit = false) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formDataUpload = new FormData();
+    formDataUpload.append("file", file);
+
+    try {
+      const response = await axios.post(
+        "/api/exercises/upload-gif",
+        formDataUpload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      const uploadedUrl = response.data;
+
+      if (isEdit) {
+        setFormData((prev) => ({ ...prev, gifUrl: uploadedUrl }));
+      } else {
+        setNewExerciseData((prev) => ({ ...prev, gifUrl: uploadedUrl }));
+      }
+    } catch (error) {
+      console.error("GIF upload failed", error);
+    }
+  };
+
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
@@ -110,10 +141,7 @@ const ExerciseManagementPage = () => {
 
         <div className="flex-1 p-6">
           <div className="flex items-center justify-between mb-6">
-            {/* Spacer to push search input to center */}
             <div className="w-1/3" />
-
-            {/* Centered Search Input */}
             <div className="w-1/3 flex justify-center">
               <div className="relative w-96">
                 <input
@@ -128,8 +156,6 @@ const ExerciseManagementPage = () => {
                 </div>
               </div>
             </div>
-
-            {/* Right-Aligned Add Button */}
             <div className="w-1/3 flex justify-end">
               <button
                 className="bg-fitme-blue text-white px-4 py-2 rounded shadow hover:bg-fitme-blue-hover"
@@ -146,7 +172,7 @@ const ExerciseManagementPage = () => {
                 <tr className="bg-gray-200 text-gray-500">
                   <th className="py-4 px-20 text-left font-medium">ID</th>
                   <th className="py-4 px-6 text-left font-medium">NAME</th>
-                  <th className="py-4 px-6 text-left font-medium">GIF URL</th>
+                  <th className="py-4 px-6 text-left font-medium">GIF</th>
                   <th className="py-4 px-6 text-left font-medium">ACTIONS</th>
                 </tr>
               </thead>
@@ -162,7 +188,24 @@ const ExerciseManagementPage = () => {
                     >
                       <td className="py-4 px-20">{exercise.exerciseId}</td>
                       <td className="py-4 px-6">{exercise.name}</td>
-                      <td className="py-4 px-6">{exercise.gifUrl}</td>
+                      <td className="py-4 px-6">
+                        {exercise.gifUrl ? (
+                          <div className="w-20 h-20 border rounded overflow-hidden bg-white flex items-center justify-center">
+                            <img
+                              src={
+                                exercise.gifUrl.startsWith("http")
+                                  ? exercise.gifUrl
+                                  : `http://localhost:8080${exercise.gifUrl}`
+                              }
+                              alt="Exercise GIF"
+                              className="object-contain w-full h-full"
+                            />
+                          </div>
+                        ) : (
+                          "—"
+                        )}
+                      </td>
+
                       <td className="py-4 px-6">
                         <div className="flex gap-3 items-center">
                           <button
@@ -191,112 +234,65 @@ const ExerciseManagementPage = () => {
 
       {/* Edit Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded shadow-lg w-96 relative">
-            <div className="bg-blue-header text-white px-4 py-3 rounded-t flex justify-between items-center">
-              <h2 className="text-lg font-semibold">Update Exercise</h2>
-              <button
-                className="text-white text-xl leading-none"
-                onClick={() => setShowModal(false)}
-              >
-                ×
-              </button>
-            </div>
-
-            <div className="p-6">
-              <label className="block text-sm font-medium mb-1">Name</label>
-              <input
-                className="w-full border border-gray-300 rounded p-2 mb-4"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-              />
-
-              <label className="block text-sm font-medium mb-1">GIF URL</label>
-              <input
-                className="w-full border border-gray-300 rounded p-2 mb-4"
-                value={formData.gifUrl}
-                onChange={(e) =>
-                  setFormData({ ...formData, gifUrl: e.target.value })
-                }
-              />
-
-              <div className="flex justify-between mt-6">
-                <button
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow"
-                  onClick={handleUpdate}
-                >
-                  Update
-                </button>
-                <button
-                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow"
-                  onClick={() => setShowModal(false)}
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Modal
+          title="Update Exercise"
+          onClose={() => setShowModal(false)}
+          onSubmit={handleUpdate}
+        >
+          <input
+            className="w-full border border-gray-300 rounded p-2 mb-4"
+            placeholder="Exercise Name"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          />
+          <input
+            type="file"
+            accept=".gif"
+            onChange={(e) => handleGifUpload(e, true)}
+            className="w-full border border-gray-300 rounded p-2 mb-4"
+          />
+          {formData.gifUrl && (
+            <img
+              src={formData.gifUrl}
+              alt="Preview"
+              className="w-24 h-24 object-contain mb-4"
+            />
+          )}
+        </Modal>
       )}
 
       {/* Add Exercise Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded shadow-lg w-96 relative">
-            <div className="bg-blue-header text-white px-4 py-3 rounded-t flex justify-between items-center">
-              <h2 className="text-lg font-semibold">Add New Exercise</h2>
-              <button
-                className="text-white text-xl leading-none"
-                onClick={() => setShowAddModal(false)}
-              >
-                ×
-              </button>
-            </div>
-
-            <div className="p-6">
-              <label className="block text-sm font-medium mb-1">Name</label>
-              <input
-                className="w-full border border-gray-300 rounded p-2 mb-4"
-                value={newExerciseData.name}
-                onChange={(e) =>
-                  setNewExerciseData({
-                    ...newExerciseData,
-                    name: e.target.value,
-                  })
-                }
-              />
-
-              <label className="block text-sm font-medium mb-1">GIF URL</label>
-              <input
-                className="w-full border border-gray-300 rounded p-2 mb-4"
-                value={newExerciseData.gifUrl}
-                onChange={(e) =>
-                  setNewExerciseData({
-                    ...newExerciseData,
-                    gifUrl: e.target.value,
-                  })
-                }
-              />
-
-              <div className="flex justify-between mt-6">
-                <button
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow"
-                  onClick={handleAddExercise}
-                >
-                  Add
-                </button>
-                <button
-                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow"
-                  onClick={() => setShowAddModal(false)}
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Modal
+          title="Add New Exercise"
+          onClose={() => setShowAddModal(false)}
+          onSubmit={handleAddExercise}
+        >
+          <input
+            className="w-full border border-gray-300 rounded p-2 mb-4"
+            placeholder="Exercise Name"
+            value={newExerciseData.name}
+            onChange={(e) =>
+              setNewExerciseData({
+                ...newExerciseData,
+                name: e.target.value,
+              })
+            }
+          />
+          <input
+            type="file"
+            accept=".gif"
+            onChange={(e) => handleGifUpload(e, false)}
+            className="w-full border border-gray-300 rounded p-2 mb-4"
+          />
+          {newExerciseData.gifUrl && (
+            <img
+              src={newExerciseData.gifUrl}
+              alt="Preview"
+              className="w-24 h-24 object-contain mb-4"
+            />
+          )}
+        </Modal>
       )}
 
       {/* Delete Confirmation Modal */}
@@ -332,6 +328,36 @@ const ExerciseManagementPage = () => {
     </div>
   );
 };
+
+const Modal = ({ title, onClose, onSubmit, children }) => (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white rounded shadow-lg w-96 relative">
+      <div className="bg-blue-header text-white px-4 py-3 rounded-t flex justify-between items-center">
+        <h2 className="text-lg font-semibold">{title}</h2>
+        <button className="text-white text-xl leading-none" onClick={onClose}>
+          ×
+        </button>
+      </div>
+      <div className="p-6">
+        {children}
+        <div className="flex justify-between mt-6">
+          <button
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow"
+            onClick={onSubmit}
+          >
+            Save
+          </button>
+          <button
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow"
+            onClick={onClose}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
 const SearchIcon = () => (
   <svg
