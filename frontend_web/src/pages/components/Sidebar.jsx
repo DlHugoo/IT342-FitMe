@@ -11,7 +11,7 @@ const Sidebar = () => {
   // Determine active item from current path
   const getActiveItem = () => {
     if (location.pathname.startsWith("/user")) return "User";
-    if (location.pathname.startsWith("/workout-set")) return "Workout Set";
+    if (location.pathname.startsWith("/workout")) return "Workout Set";
     if (location.pathname.startsWith("/exercise")) return "Exercises";
     return "";
   };
@@ -40,7 +40,7 @@ const Sidebar = () => {
           }
           text="Workout Set"
           active={activeItem === "Workout Set"}
-          onClick={() => navigate("/workout-set")}
+          onClick={() => navigate("/workout")}
         />
         <SidebarItem
           icon={<img src={ExerciseIcon} alt="Exercises" className="h-6 w-6" />}
