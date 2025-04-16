@@ -29,6 +29,8 @@ data class WeightLogEntity(
 
 interface ApiService {
 
+    //USER
+
     // ✅ Login (still AuthController, unchanged)
     @POST("/api/login")
     fun loginUser(@Body request: LoginRequest): Call<LoginResponse>
@@ -78,11 +80,15 @@ interface ApiService {
         @Path("rawPassword") rawPassword: String
     ): Call<String>
 
+    //WORKOUTS
+
     @GET("/api/workouts")
     fun getAllWorkouts( @Header("Authorization") token: String): Call<List<Workout>>
 
     @GET("api/workout-days/{workoutId}")
     suspend fun getWorkoutDays(@Path("workoutId") workoutId: Long): List<WorkoutDay>
+
+    //WEIGHT LOGS
 
     // ✅ Update weight (for logged-in user, uses JWT token)
     @PATCH("/api/users/weight")
