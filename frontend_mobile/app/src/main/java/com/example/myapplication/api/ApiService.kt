@@ -1,6 +1,7 @@
 package com.example.myapplication.api
 
 import com.example.myapplication.model.User
+import com.example.myapplication.model.WeightLog
 import com.example.myapplication.model.Workout
 import com.example.myapplication.model.WorkoutDay
 import retrofit2.Call
@@ -22,7 +23,13 @@ data class WeightUpdateRequest(
     val weight: Double
 )
 
+data class WeightLogEntity(
+    val weight: Double
+)
+
 interface ApiService {
+
+    //USER
 
     // ✅ Login (still AuthController, unchanged)
     @POST("/api/login")
@@ -73,11 +80,15 @@ interface ApiService {
         @Path("rawPassword") rawPassword: String
     ): Call<String>
 
+    //WORKOUTS
+
     @GET("/api/workouts")
     fun getAllWorkouts( @Header("Authorization") token: String): Call<List<Workout>>
 
     @GET("api/workout-days/{workoutId}")
     suspend fun getWorkoutDays(@Path("workoutId") workoutId: Long): List<WorkoutDay>
+
+    //WEIGHT LOGS
 
     // ✅ Update weight (for logged-in user, uses JWT token)
     @PATCH("/api/users/weight")
@@ -85,5 +96,16 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body request: WeightUpdateRequest
     ): Call<User>
+
+    @GET("/api/weights")
+    fun getWeightLogs(
+        @Header("Authorization") token: String
+    ): Call<List<WeightLog>>
+
+    @POST("/api/weights")
+    fun logWeight(
+        @Header("Authorization") token: String,
+        @Body weightLog: WeightLogEntity
+    ): Call<WeightLog>
 
 }
