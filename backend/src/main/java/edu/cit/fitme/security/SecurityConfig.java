@@ -24,6 +24,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/uploads/**").permitAll()
 
                         // 🔓 Public Endpoints
                         .requestMatchers("/api/users/encode/**").permitAll()
@@ -73,8 +74,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/weights/**").hasRole("ADMIN")
 
                         // 🔒 Catch-all secured
-                        .anyRequest().authenticated()
-                )
+                        .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
