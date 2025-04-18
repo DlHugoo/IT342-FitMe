@@ -7,6 +7,9 @@ const WorkoutManagementPage = () => {
   const [workouts, setWorkouts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [selectedWorkout, setSelectedWorkout] = useState(null);
+  const [workoutToDelete, setWorkoutToDelete] = useState(null);
+
   const [newWorkout, setNewWorkout] = useState({
     title: "",
     difficulty: "",
@@ -50,6 +53,53 @@ const WorkoutManagementPage = () => {
     }
   };
 
+  const handleEditClick = (workout) => {
+    setSelectedWorkout(workout);
+    setNewWorkout({
+      title: workout.title,
+      difficulty: workout.difficulty,
+      days: workout.days,
+    });
+    setShowModal(true);
+  };
+
+  const handleUpdateWorkout = async () => {
+    try {
+      await axios.put(
+        `/api/workouts/${selectedWorkout.workoutId}`,
+        newWorkout,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setShowModal(false);
+      setSelectedWorkout(null);
+      fetchWorkouts();
+    } catch (err) {
+      console.error("Failed to update workout", err);
+    }
+  };
+
+  const handleDeleteClick = (workout) => {
+    setWorkoutToDelete(workout);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await axios.delete(`/api/workouts/${workoutToDelete.workoutId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setWorkoutToDelete(null);
+      fetchWorkouts();
+    } catch (err) {
+      console.error("Failed to delete workout", err);
+    }
+  };
+
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
@@ -80,7 +130,11 @@ const WorkoutManagementPage = () => {
             <div className="w-1/3 flex justify-end">
               <button
                 className="bg-fitme-blue text-white px-4 py-2 rounded shadow hover:bg-fitme-blue-hover"
-                onClick={() => setShowModal(true)}
+                onClick={() => {
+                  setSelectedWorkout(null);
+                  setNewWorkout({ title: "", difficulty: "", days: 1 });
+                  setShowModal(true);
+                }}
               >
                 Add Workout
               </button>
@@ -97,6 +151,7 @@ const WorkoutManagementPage = () => {
                     DIFFICULTY
                   </th>
                   <th className="py-4 px-6 text-left font-medium">DAYS</th>
+                  <th className="py-4 px-6 text-left font-medium">ACTIONS</th>
                 </tr>
               </thead>
               <tbody>
@@ -113,6 +168,24 @@ const WorkoutManagementPage = () => {
                       <td className="py-4 px-6">{w.title}</td>
                       <td className="py-4 px-6">{w.difficulty}</td>
                       <td className="py-4 px-6">{w.days}</td>
+                      <td className="py-4 px-6">
+                        <div className="flex gap-3 items-center">
+                          <button
+                            className="text-blue-600 hover:text-blue-800"
+                            onClick={() => handleEditClick(w)}
+                            title="Edit"
+                          >
+                            <EditIcon />
+                          </button>
+                          <button
+                            className="text-red-500 hover:text-red-700"
+                            onClick={() => handleDeleteClick(w)}
+                            title="Delete"
+                          >
+                            <DeleteIcon />
+                          </button>
+                        </div>
+                      </td>
                     </tr>
                   ))}
               </tbody>
@@ -123,9 +196,9 @@ const WorkoutManagementPage = () => {
 
       {showModal && (
         <Modal
-          title="Add Workout"
+          title={selectedWorkout ? "Update Workout" : "Add Workout"}
           onClose={() => setShowModal(false)}
-          onSubmit={handleAddWorkout}
+          onSubmit={selectedWorkout ? handleUpdateWorkout : handleAddWorkout}
         >
           <input
             className="w-full border border-gray-300 rounded p-2 mb-4"
@@ -135,7 +208,6 @@ const WorkoutManagementPage = () => {
               setNewWorkout((prev) => ({ ...prev, title: e.target.value }))
             }
           />
-
           <select
             className="w-full border border-gray-300 rounded p-2 mb-4"
             value={newWorkout.difficulty}
@@ -148,11 +220,11 @@ const WorkoutManagementPage = () => {
             <option value="Medium">Medium</option>
             <option value="Hard">Hard</option>
           </select>
-
           <input
             type="number"
             className="w-full border border-gray-300 rounded p-2 mb-4"
             placeholder="Days"
+            min={1}
             value={newWorkout.days}
             onChange={(e) =>
               setNewWorkout((prev) => ({
@@ -160,9 +232,38 @@ const WorkoutManagementPage = () => {
                 days: parseInt(e.target.value),
               }))
             }
-            min={1}
           />
         </Modal>
+      )}
+
+      {workoutToDelete && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-md p-6 shadow-lg w-80 relative">
+            <button
+              className="absolute top-2 right-3 text-gray-500"
+              onClick={() => setWorkoutToDelete(null)}
+            >
+              ✕
+            </button>
+            <h2 className="text-center text-lg font-semibold text-gray-800 mb-6">
+              Are you sure you want <br /> to delete this workout?
+            </h2>
+            <div className="flex justify-between px-4">
+              <button
+                className="border border-gray-400 text-gray-700 px-4 py-2 rounded"
+                onClick={() => setWorkoutToDelete(null)}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                onClick={confirmDelete}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
@@ -211,6 +312,40 @@ const SearchIcon = () => (
       strokeLinejoin="round"
       strokeWidth={2}
       d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+    />
+  </svg>
+);
+
+const EditIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-5 w-5"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+    />
+  </svg>
+);
+
+const DeleteIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-5 w-5"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
     />
   </svg>
 );
