@@ -57,4 +57,5 @@ public class WorkoutDayService {
     public void deleteDay(Long id) {
         workoutDayRepository.deleteById(id);
     }
+
 }

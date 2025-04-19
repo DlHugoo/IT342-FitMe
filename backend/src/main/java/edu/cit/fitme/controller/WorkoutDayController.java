@@ -45,4 +45,11 @@ public class WorkoutDayController {
         workoutDayService.deleteDay(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/day/{id}")
+    public ResponseEntity<WorkoutDayEntity> getDayById(@PathVariable Long id) {
+        return workoutDayService.getDayById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

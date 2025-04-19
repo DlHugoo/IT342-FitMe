@@ -8,7 +8,6 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Determine active item from current path
   const getActiveItem = () => {
     if (location.pathname.startsWith("/user")) return "User";
     if (location.pathname.startsWith("/workout")) return "Workout Set";
@@ -19,14 +18,16 @@ const Sidebar = () => {
   const activeItem = getActiveItem();
 
   return (
-    <div className="w-60 bg-white border-r border-gray-200 flex flex-col h-full">
-      <div className="p-4 bg-white px-10 mb-5 mt-3">
+    <div className="fixed top-0 left-0 h-screen w-60 bg-white border-r border-gray-200 flex flex-col justify-between z-50">
+      {/* Logo */}
+      <div className="p-4 px-10 mt-3">
         <div className="flex items-center cursor-pointer">
           <img src={FitmeLogo} alt="Fitme Logo" className="h-10 w-10 mr-2" />
           <div className="text-3xl font-bold text-fitme-blue">FITME</div>
         </div>
       </div>
 
+      {/* Menu Items */}
       <div className="mt-5 flex-grow">
         <SidebarItem
           icon={<img src={UserIcon} alt="User" className="h-6 w-6" />}
@@ -50,6 +51,7 @@ const Sidebar = () => {
         />
       </div>
 
+      {/* Footer */}
       <div className="p-4 text-sm text-gray-500 text-center">
         © 2025 Fitme Inc.
       </div>

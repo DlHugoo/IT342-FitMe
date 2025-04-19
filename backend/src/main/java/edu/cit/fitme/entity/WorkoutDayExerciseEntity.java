@@ -18,8 +18,8 @@ public class WorkoutDayExerciseEntity {
     @JoinColumn(name = "exercise_id")
     private ExerciseEntity exercise;
 
-    private Integer duration;   // e.g. 30 seconds
-    private Integer reps;       // e.g. 10 reps
+    private Integer duration; // e.g. 30 seconds
+    private Integer reps; // e.g. 10 reps
 
     public Long getId() {
         return id;
