@@ -192,9 +192,7 @@ const WorkoutDaysExercisePage = () => {
                       key={ex.id}
                       className="border-t border-gray-200 hover:bg-gray-50"
                     >
-                      <td className="py-4 px-6 text-blue-600">
-                        {ex.exercise?.name || "Unnamed Exercise"}
-                      </td>
+                      <td className="py-4 px-6">{ex.exerciseName}</td>
                       <td className="py-4 px-6">{ex.reps ?? "—"}</td>
                       <td className="py-4 px-6">{ex.duration ?? "—"}</td>
                       <td className="py-4 px-6">

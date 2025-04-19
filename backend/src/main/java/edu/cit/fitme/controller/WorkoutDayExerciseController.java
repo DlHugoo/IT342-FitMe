@@ -1,9 +1,11 @@
 package edu.cit.fitme.controller;
 
+import edu.cit.fitme.dto.WorkoutDayExerciseDTO;
 import edu.cit.fitme.entity.WorkoutDayExerciseEntity;
 import edu.cit.fitme.service.WorkoutDayExerciseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import edu.cit.fitme.dto.WorkoutDayExerciseDTO;
 
 import java.util.List;
 
@@ -18,13 +20,16 @@ public class WorkoutDayExerciseController {
     }
 
     @GetMapping("/{dayId}")
-    public List<WorkoutDayExerciseEntity> getByDayId(@PathVariable Long dayId) {
-        return service.getExercisesByDayId(dayId);
-    }
+public List<WorkoutDayExerciseDTO> getByDayId(@PathVariable Long dayId) {
+    return service.getExercisesByDayId(dayId).stream()
+            .map(WorkoutDayExerciseDTO::new)
+            .toList();
+}
 
     @PostMapping
     public WorkoutDayExerciseEntity create(@RequestBody WorkoutDayExerciseEntity data) {
         return service.create(data);
+            
     }
 
     @PutMapping("/{id}")
