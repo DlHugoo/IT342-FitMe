@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Sidebar from "../components/Sidebar";
@@ -6,6 +6,7 @@ import Headerbar from "../components/Headerbar";
 
 const WorkoutDaysPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [days, setDays] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
@@ -148,13 +149,13 @@ const WorkoutDaysPage = () => {
             <table className="w-full table-fixed">
               <thead>
                 <tr className="bg-gray-200 text-gray-500">
-                  <th className="py-4 px-10 text-left font-medium w-1/3">
+                  <th className="py-4 px-36 text-left font-medium w-1/3">
                     DAY #
                   </th>
-                  <th className="py-4 px-6 text-left font-medium w-1/3">
+                  <th className="py-4 px-24 text-left font-medium w-1/3">
                     REST DAY
                   </th>
-                  <th className="py-4 px-6 text-left font-medium w-1/3">
+                  <th className="py-4 px-24 text-left font-medium w-1/3">
                     ACTIONS
                   </th>
                 </tr>
@@ -165,9 +166,16 @@ const WorkoutDaysPage = () => {
                     key={day.dayId}
                     className="border-t border-gray-200 hover:bg-gray-50"
                   >
-                    <td className="py-4 px-10">{day.dayNumber}</td>
-                    <td className="py-4 px-6">{day.restDay ? "Yes" : "No"}</td>
-                    <td className="py-4 px-6">
+                    <td
+                      className="py-4 px-36 text-blue-600 hover:underline cursor-pointer"
+                      onClick={() =>
+                        navigate(`/workout/${id}/days/${day.dayId}`)
+                      }
+                    >
+                      Day {day.dayNumber}
+                    </td>
+                    <td className="py-4 px-24">{day.restDay ? "Yes" : "No"}</td>
+                    <td className="py-4 px-24">
                       <div className="flex items-center gap-4">
                         <button
                           className="text-blue-500 hover:text-blue-700"

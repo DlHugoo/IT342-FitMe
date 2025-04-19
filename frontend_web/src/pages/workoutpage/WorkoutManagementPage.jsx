@@ -180,7 +180,7 @@ const WorkoutManagementPage = () => {
                     >
                       <td className="py-4 px-20">{w.workoutId}</td>
                       <td className="py-4 px-6 text-blue-600 cursor-pointer">
-                        <a href={`/workouts/${w.workoutId}/days`}>{w.title}</a>
+                        <a href={`/workout/${w.workoutId}`}>{w.title}</a>
                       </td>
                       <td className="py-4 px-6">{w.difficulty}</td>
                       <td className="py-4 px-6">{w.days}</td>
