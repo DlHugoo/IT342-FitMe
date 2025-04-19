@@ -13,7 +13,6 @@ const WorkoutManagementPage = () => {
   const [newWorkout, setNewWorkout] = useState({
     title: "",
     difficulty: "",
-    days: 1,
   });
 
   useEffect(() => {
@@ -27,14 +26,30 @@ const WorkoutManagementPage = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      setWorkouts(res.data);
+
+      // Fetch days for each workout
+      const workoutsWithDays = await Promise.all(
+        res.data.map(async (workout) => {
+          const daysRes = await axios.get(
+            `/api/workout-days/${workout.workoutId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+          return { ...workout, days: daysRes.data.length };
+        })
+      );
+
+      setWorkouts(workoutsWithDays);
     } catch (err) {
       console.error("Failed to fetch workouts", err);
     }
   };
 
   const handleAddWorkout = async () => {
-    if (!newWorkout.title || !newWorkout.difficulty || newWorkout.days < 1) {
+    if (!newWorkout.title || !newWorkout.difficulty) {
       alert("Please fill in all fields correctly.");
       return;
     }
@@ -45,7 +60,7 @@ const WorkoutManagementPage = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      setNewWorkout({ title: "", difficulty: "", days: 1 });
+      setNewWorkout({ title: "", difficulty: "" });
       setShowModal(false);
       fetchWorkouts();
     } catch (err) {
@@ -58,7 +73,6 @@ const WorkoutManagementPage = () => {
     setNewWorkout({
       title: workout.title,
       difficulty: workout.difficulty,
-      days: workout.days,
     });
     setShowModal(true);
   };
@@ -101,9 +115,9 @@ const WorkoutManagementPage = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex bg-gray-100 min-h-screen">
       <Sidebar />
-      <div className="flex-1 flex flex-col">
+      <div className="ml-60 flex flex-col flex-grow">
         <Headerbar />
 
         <div className="bg-blue-header2 text-white px-4 pb-0">
@@ -132,7 +146,7 @@ const WorkoutManagementPage = () => {
                 className="bg-fitme-blue text-white px-4 py-2 rounded shadow hover:bg-fitme-blue-hover"
                 onClick={() => {
                   setSelectedWorkout(null);
-                  setNewWorkout({ title: "", difficulty: "", days: 1 });
+                  setNewWorkout({ title: "", difficulty: "" });
                   setShowModal(true);
                 }}
               >
@@ -165,7 +179,9 @@ const WorkoutManagementPage = () => {
                       className="border-t border-gray-200 hover:bg-gray-50"
                     >
                       <td className="py-4 px-20">{w.workoutId}</td>
-                      <td className="py-4 px-6">{w.title}</td>
+                      <td className="py-4 px-6 text-blue-600 cursor-pointer">
+                        <a href={`/workouts/${w.workoutId}/days`}>{w.title}</a>
+                      </td>
                       <td className="py-4 px-6">{w.difficulty}</td>
                       <td className="py-4 px-6">{w.days}</td>
                       <td className="py-4 px-6">
@@ -220,19 +236,6 @@ const WorkoutManagementPage = () => {
             <option value="Medium">Medium</option>
             <option value="Hard">Hard</option>
           </select>
-          <input
-            type="number"
-            className="w-full border border-gray-300 rounded p-2 mb-4"
-            placeholder="Days"
-            min={1}
-            value={newWorkout.days}
-            onChange={(e) =>
-              setNewWorkout((prev) => ({
-                ...prev,
-                days: parseInt(e.target.value),
-              }))
-            }
-          />
         </Modal>
       )}
 

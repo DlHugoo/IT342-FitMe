@@ -7,6 +7,7 @@ import AboutUsPage from "./pages/abousus/AboutUsPage";
 import UserManagementPage from "./pages/usermngpage/UserManagementPage";
 import ExerciseManagementPage from "./pages/exercisemngpage/ExerciseManagementPage";
 import WorkoutManagementPage from "./pages/workoutpage/WorkoutManagementPage";
+import WorkoutDaysPage from "./pages/workoutpage/WorkoutDaysPage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/user" element={<UserManagementPage />} />
         <Route path="/exercise" element={<ExerciseManagementPage />} />
         <Route path="/workout" element={<WorkoutManagementPage />} />
+        <Route path="/workouts/:id/days" element={<WorkoutDaysPage />} />
       </Routes>
     </Router>
   );
