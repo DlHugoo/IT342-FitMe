@@ -1,3 +1,4 @@
+//userEntity
 package edu.cit.fitme.entity;
 
 import jakarta.persistence.*;
@@ -23,7 +24,7 @@ public class UserEntity implements UserDetails {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
