@@ -1,5 +1,7 @@
 package edu.cit.fitme.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -12,6 +14,7 @@ public class WorkoutDayExerciseEntity {
 
     @ManyToOne
     @JoinColumn(name = "day_id")
+    @JsonBackReference
     private WorkoutDayEntity workoutDay;
 
     @ManyToOne
