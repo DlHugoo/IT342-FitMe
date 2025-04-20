@@ -11,8 +11,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.myapplication.adapter.DayAdapter
+import com.example.myapplication.api.RetrofitClient
 import com.example.myapplication.model.Workout
 import com.example.myapplication.model.WorkoutDay
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class WorkoutsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,18 +66,50 @@ class WorkoutsActivity : AppCompatActivity() {
 
         // Generate days dynamically
         val listView = findViewById<ListView>(R.id.listViewDays)
-        val daysList = mutableListOf<WorkoutDay>()
 
-        // Create WorkoutDay objects for each day, marking every 4th day as a rest day
-        val totalDays = workout?.days ?: 30 // Default to 30 if no days data
-        for (i in 1..totalDays) {
-            val isRest = i % 4 == 0
-            daysList.add(WorkoutDay(i.toLong(), i, isRest, workout)) // Convert i to Long for dayId
+        // Fetch workout days from API
+        val apiService = RetrofitClient.instance
+        val sharedPref = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val token = sharedPref.getString("token", "") ?: ""
+
+        if (token.isNotEmpty()) {
+            refreshWorkoutDays(workoutId, token)
         }
+    }
 
-        // Set adapter to display days
-        val adapter = DayAdapter(this, daysList)
-        listView.adapter = adapter
+    private fun refreshWorkoutDays(workoutId: Long, token: String) {
+        val apiService = RetrofitClient.instance
+        apiService.getAllWorkoutDays("Bearer $token").enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    // Log the raw JSON response
+                    val rawJson = response.body()?.string()
+                    android.util.Log.d("WorkoutsActivity", "Raw JSON Response: $rawJson")
+
+                    // Parse the JSON response into a list of WorkoutDay objects
+                    val gson = RetrofitClient.gson
+                    val workoutDays = gson.fromJson(rawJson, Array<WorkoutDay>::class.java).toList()
+
+                    // Filter and display the workout days
+                    val daysList = workoutDays.filter { it.workout?.workoutId == workoutId }
+                    daysList.forEach { day ->
+                        android.util.Log.d("WorkoutsActivity", "Day ${day.dayNumber}, isRestDay: ${day.isRestDay}")
+                    }
+
+                    // Update the ListView with the workout days
+                    val adapter = DayAdapter(this@WorkoutsActivity, daysList)
+                    findViewById<ListView>(R.id.listViewDays).adapter = adapter
+                } else {
+                    // Log the error response
+                    val errorJson = response.errorBody()?.string()
+                    android.util.Log.e("WorkoutsActivity", "Error Response: $errorJson")
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                t.printStackTrace()
+            }
+        })
     }
 
     private fun getImageForDifficulty(difficulty: String?): Int {
