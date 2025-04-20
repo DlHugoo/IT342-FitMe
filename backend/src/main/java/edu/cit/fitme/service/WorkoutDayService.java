@@ -37,17 +37,20 @@ public class WorkoutDayService {
         WorkoutEntity fullWorkout = workoutRepository.findById(workoutId)
                 .orElseThrow(() -> new RuntimeException("Workout not found with id: " + workoutId));
 
-        day.setWorkout(fullWorkout); // ✅ Attach the full workout object
-        // ✅ Save rest day value
+        day.setWorkout(fullWorkout);
         day.setRestDay(day.isRestDay());
 
-        return workoutDayRepository.save(day);
+        WorkoutDayEntity savedDay = workoutDayRepository.save(day);
+
+        // 🔁 Update workout.days field after saving a day
+        updateWorkoutDayCount(workoutId);
+
+        return savedDay;
     }
 
     public Optional<WorkoutDayEntity> updateDay(Long id, WorkoutDayEntity updatedDay) {
         return workoutDayRepository.findById(id).map(day -> {
             day.setDayNumber(updatedDay.getDayNumber());
-            // ✅ Allow updating rest day flag
             day.setRestDay(updatedDay.isRestDay());
 
             return workoutDayRepository.save(day);
@@ -55,7 +58,23 @@ public class WorkoutDayService {
     }
 
     public void deleteDay(Long id) {
-        workoutDayRepository.deleteById(id);
+        Optional<WorkoutDayEntity> maybeDay = workoutDayRepository.findById(id);
+
+        maybeDay.ifPresent(day -> {
+            Long workoutId = day.getWorkout().getWorkoutId();
+            workoutDayRepository.deleteById(id);
+            // 🔁 Update workout.days field after deletion
+            updateWorkoutDayCount(workoutId);
+        });
     }
 
+    // ✅ Recalculate number of days for the workout and persist it
+    private void updateWorkoutDayCount(Long workoutId) {
+        List<WorkoutDayEntity> allDays = workoutDayRepository.findByWorkoutWorkoutId(workoutId);
+        WorkoutEntity workout = workoutRepository.findById(workoutId)
+                .orElseThrow(() -> new RuntimeException("Workout not found with id: " + workoutId));
+
+        workout.setDays(allDays.size());
+        workoutRepository.save(workout);
+    }
 }
