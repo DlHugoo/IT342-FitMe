@@ -4,6 +4,7 @@ import com.example.myapplication.model.User
 import com.example.myapplication.model.WeightLog
 import com.example.myapplication.model.Workout
 import com.example.myapplication.model.WorkoutDay
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -108,4 +109,9 @@ interface ApiService {
         @Body weightLog: WeightLogEntity
     ): Call<WeightLog>
 
+    //Workout Days
+    @GET("/api/workout-days")
+    fun getAllWorkoutDays(
+        @Header("Authorization") token: String
+    ): Call<ResponseBody>
 }
