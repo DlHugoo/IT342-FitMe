@@ -3,6 +3,8 @@ package edu.cit.fitme.entity;
 import jakarta.persistence.*;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "workout_days")
 public class WorkoutDayEntity {
@@ -21,6 +23,7 @@ public class WorkoutDayEntity {
     private WorkoutEntity workout;
 
     @OneToMany(mappedBy = "workoutDay", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<WorkoutDayExerciseEntity> exercises;
 
     // ====== Getters and Setters ======
