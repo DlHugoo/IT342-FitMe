@@ -26,9 +26,8 @@ class DayAdapter(private val context: Context, private val days: List<WorkoutDay
         dayText.text = "Day ${workoutDays.dayNumber}"
 
         if (workoutDays.isRestDay) {
-            // Mark Rest Days
             restText.visibility = View.VISIBLE
-            restText.text = "Rest"
+            restText.text = "REST"
             checkIcon.visibility = View.GONE
         } else {
             restText.visibility = View.GONE
@@ -36,6 +35,7 @@ class DayAdapter(private val context: Context, private val days: List<WorkoutDay
         }
 
         return view
+
 
     }
 }
