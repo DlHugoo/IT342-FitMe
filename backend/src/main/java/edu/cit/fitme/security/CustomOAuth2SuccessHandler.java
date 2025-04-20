@@ -1,4 +1,3 @@
-//CustomOAuth2SuccessHandler
 package edu.cit.fitme.security;
 
 import edu.cit.fitme.entity.UserEntity;
@@ -6,12 +5,15 @@ import edu.cit.fitme.repository.UserRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.context.annotation.Lazy;
 
 import java.io.IOException;
 
@@ -21,14 +23,17 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
+    private final OAuth2AuthorizedClientService authorizedClientService;
 
     public CustomOAuth2SuccessHandler(
             UserRepository userRepository,
             JwtUtil jwtUtil,
-            @Lazy PasswordEncoder passwordEncoder) {
+            @Lazy PasswordEncoder passwordEncoder,
+            OAuth2AuthorizedClientService authorizedClientService) {
         this.userRepository = userRepository;
         this.jwtUtil = jwtUtil;
         this.passwordEncoder = passwordEncoder;
+        this.authorizedClientService = authorizedClientService;
     }
 
     @Override
@@ -53,14 +58,23 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
                     newUser.setEmail(email);
                     newUser.setUsername(name);
                     newUser.setRole("user");
-                    newUser.setPassword(passwordEncoder.encode("oauth2-login")); // Set dummy password
+                    newUser.setPassword(passwordEncoder.encode("oauth2-login")); // Dummy password
                     return userRepository.save(newUser);
                 });
 
-        // Generate JWT
+        // 🔐 Get Google OAuth2 access token
+        OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
+        OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(
+                oauthToken.getAuthorizedClientRegistrationId(),
+                oauthToken.getName());
+
+        String accessToken = client.getAccessToken().getTokenValue();
+        System.out.println("🔑 Google Access Token: " + accessToken);
+
+        // ✅ Issue your own app's JWT
         String jwtToken = jwtUtil.generateToken(user.getEmail(), user.getRole());
 
-        // Redirect with token
+        // Redirect to frontend (or success handler) with JWT
         response.sendRedirect("/oauth2/success?token=" + jwtToken);
     }
 }

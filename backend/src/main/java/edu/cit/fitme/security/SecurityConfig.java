@@ -35,6 +35,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers("/api/login").permitAll()
                         .requestMatchers("/oauth2/**", "/login/**").permitAll() // ✅ Google OAuth2
+                        .requestMatchers("/api/google/**").permitAll()
+
 
                         // 🔐 Secured
                         .requestMatchers(HttpMethod.PUT, "/api/users").hasAnyRole("USER", "ADMIN")

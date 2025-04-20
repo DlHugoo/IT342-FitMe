@@ -1,6 +1,8 @@
 package edu.cit.fitme.entity;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -25,6 +27,12 @@ public class WorkoutDayEntity {
     @OneToMany(mappedBy = "workoutDay", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<WorkoutDayExerciseEntity> exercises;
+
+    @Column(name = "calendar_event_id")
+    private String calendarEventId;
+
+    @Column(name = "scheduled_date")
+    private LocalDate scheduledDate;
 
     // ====== Getters and Setters ======
 
@@ -66,5 +74,21 @@ public class WorkoutDayEntity {
 
     public void setExercises(List<WorkoutDayExerciseEntity> exercises) {
         this.exercises = exercises;
+    }
+
+    public String getCalendarEventId() {
+        return calendarEventId;
+    }
+
+    public void setCalendarEventId(String calendarEventId) {
+        this.calendarEventId = calendarEventId;
+    }
+
+    public LocalDate getScheduledDate() {
+        return scheduledDate;
+    }
+
+    public void setScheduledDate(LocalDate scheduledDate) {
+        this.scheduledDate = scheduledDate;
     }
 }

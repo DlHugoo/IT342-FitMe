@@ -26,8 +26,11 @@ public class ProgressService {
     @Autowired
     private WorkoutRepository workoutRepository;
 
-    // 🆕 Log today's workout progress
-    public Optional<ProgressEntity> logProgress(String email, Long workoutId) {
+    @Autowired
+    private GoogleCalendarService googleCalendarService;
+
+    // ✅ Log progress + optional Google Calendar sync
+    public Optional<ProgressEntity> logProgress(String email, Long workoutId, String accessToken) {
         return userRepository.findByEmail(email).flatMap(user -> {
             Optional<WorkoutEntity> workoutOpt = workoutRepository.findById(workoutId);
 
@@ -35,30 +38,50 @@ public class ProgressService {
                 return Optional.empty(); // Workout not found
             }
 
+            WorkoutEntity workout = workoutOpt.get();
+
             ProgressEntity progress = new ProgressEntity();
             progress.setUser(user);
-            progress.setWorkout(workoutOpt.get());
+            progress.setWorkout(workout);
             progress.setDate(LocalDate.now());
+
+            // Optional calendar sync
+            try {
+                String calendarEventId = googleCalendarService.createCalendarEventForProgress(accessToken, progress);
+                progress.setCalendarEventId(calendarEventId);
+            } catch (Exception e) {
+                System.err.println("⚠️ Calendar sync failed: " + e.getMessage());
+            }
 
             return Optional.of(progressRepository.save(progress));
         });
     }
 
-    // 📥 Get all logs for a user, sorted by date
+    // 📥 Get all progress logs
     public List<ProgressEntity> getProgressByUserTimeSorted(Long userId) {
         return userRepository.findById(userId)
                 .map(progressRepository::findByUserOrderByDateDesc)
                 .orElse(Collections.emptyList());
     }
 
-    // 📅 Get today's log for a user
+    // 📅 Get today's progress (if any)
     public Optional<ProgressEntity> getProgressForToday(Long userId) {
         return userRepository.findById(userId)
                 .flatMap(user -> progressRepository.findByUserAndDate(user, LocalDate.now()));
     }
 
-    // ❌ Delete a progress log
-    public void deleteProgressById(Long id) {
-        progressRepository.deleteById(id);
+    // ❌ Delete progress log and calendar event if exists
+    public void deleteProgressById(Long id, String accessToken) {
+        progressRepository.findById(id).ifPresent(progress -> {
+            if (progress.getCalendarEventId() != null) {
+                try {
+                    googleCalendarService.deleteEvent(accessToken, progress.getCalendarEventId());
+                } catch (Exception e) {
+                    System.err.println("⚠️ Calendar event deletion failed: " + e.getMessage());
+                }
+            }
+
+            progressRepository.deleteById(id);
+        });
     }
 }

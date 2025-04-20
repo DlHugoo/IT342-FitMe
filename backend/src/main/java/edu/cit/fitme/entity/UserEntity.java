@@ -1,11 +1,10 @@
-//userEntity
 package edu.cit.fitme.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -32,7 +31,7 @@ public class UserEntity implements UserDetails {
     private String role; // 'admin' or 'user'
 
     @Column
-    private Integer age; // ✅ New field
+    private Integer age;
 
     @Column
     private Float weight;
@@ -40,13 +39,19 @@ public class UserEntity implements UserDetails {
     @Column
     private Float height;
 
-    // ===== UserDetails methods and other logic remain unchanged ===== //
+    @Column(name = "google_access_token", length = 1024)
+    private String googleAccessToken;
 
-    // Getters and setters (updated)
+    @Column(name = "google_connected")
+    private boolean googleConnected = false;
+
+    // ===== Getters & Setters =====
+
     public Long getId() {
         return id;
     }
 
+    @Override
     public String getUsername() {
         return username;
     }
@@ -80,11 +85,11 @@ public class UserEntity implements UserDetails {
         this.role = role;
     }
 
-    public Integer getAge() { // ✅ Getter
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(Integer age) { // ✅ Setter
+    public void setAge(Integer age) {
         this.age = age;
     }
 
@@ -104,9 +109,46 @@ public class UserEntity implements UserDetails {
         this.height = height;
     }
 
-    // UserDetails methods...
+    public String getGoogleAccessToken() {
+        return googleAccessToken;
+    }
+
+    public void setGoogleAccessToken(String googleAccessToken) {
+        this.googleAccessToken = googleAccessToken;
+    }
+
+    public boolean isGoogleConnected() {
+        return googleConnected;
+    }
+
+    public void setGoogleConnected(boolean googleConnected) {
+        this.googleConnected = googleConnected;
+    }
+
+    // ===== UserDetails Implementation =====
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
