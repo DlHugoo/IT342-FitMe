@@ -7,12 +7,14 @@ public class WorkoutDayExerciseDTO {
     private String exerciseName;
     private Integer reps;
     private Integer duration;
+    private String gifUrl;
 
     public WorkoutDayExerciseDTO(WorkoutDayExerciseEntity entity) {
         this.id = entity.getId();
         this.exerciseName = entity.getExercise() != null ? entity.getExercise().getName() : "Unknown";
         this.reps = entity.getReps();
         this.duration = entity.getDuration();
+        this.gifUrl = entity.getExercise() != null ? entity.getExercise().getGifUrl() : null; // Map gifUrl
     }
 
     public Long getId() {
@@ -30,4 +32,8 @@ public class WorkoutDayExerciseDTO {
     public Integer getDuration() {
         return duration;
     }
+
+    public String getGifUrl() {return gifUrl;}
+
+    public void setGifUrl(String gifUrl) {this.gifUrl = gifUrl;}
 }

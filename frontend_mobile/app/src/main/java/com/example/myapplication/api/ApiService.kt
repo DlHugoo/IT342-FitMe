@@ -1,9 +1,11 @@
 package com.example.myapplication.api
 
+import com.example.myapplication.model.Exercise
 import com.example.myapplication.model.User
 import com.example.myapplication.model.WeightLog
 import com.example.myapplication.model.Workout
 import com.example.myapplication.model.WorkoutDay
+import com.example.myapplication.model.WorkoutDayExercise
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -84,7 +86,10 @@ interface ApiService {
     //WORKOUTS
 
     @GET("/api/workouts")
-    fun getAllWorkouts( @Header("Authorization") token: String): Call<List<Workout>>
+    fun getAllWorkouts(
+        @Header("Authorization")
+        token: String
+    ): Call<List<Workout>>
 
     @GET("api/workout-days/{workoutId}")
     suspend fun getWorkoutDays(@Path("workoutId") workoutId: Long): List<WorkoutDay>
@@ -114,4 +119,34 @@ interface ApiService {
     fun getAllWorkoutDays(
         @Header("Authorization") token: String
     ): Call<ResponseBody>
+
+    @GET("/api/workout-days/day/{id}")
+    fun getDayById(
+        @Path("id") id: Long,
+        @Header("Authorization") token: String
+    ): Call<WorkoutDay>
+
+
+    // WORKOUT DAY EXERCISES
+    // ✅ Get exercises by day ID
+    @GET("/api/day-exercises/{dayId}")
+    fun getExercisesByDayId(
+        @Path("dayId") dayId: Long,
+        @Header("Authorization") token: String
+    ): Call<List<WorkoutDayExercise>>
+
+    // EXERCISES
+    // ✅ Get all exercises
+    @GET("/api/exercises")
+    fun getAllExercises(
+        @Header("Authorization")
+        token: String
+    ): Call<List<Exercise>>
+
+    // ✅ Get exercise by ID
+    @GET("/api/exercises/{id}")
+    fun getExerciseById(
+        @Path("id") exerciseId: Exercise, // Maps "exerciseId" in the app to "id" in the backend
+        @Header("Authorization") token: String
+    ): Call<Exercise>
 }
