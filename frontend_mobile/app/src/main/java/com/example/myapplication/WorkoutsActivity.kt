@@ -116,10 +116,17 @@ class WorkoutsActivity : AppCompatActivity() {
                     // Set an OnClickListener for each item
                     listView.setOnItemClickListener { _, _, position, _ ->
                         val selectedDay = daysList[position]
-                        val intent = Intent(this@WorkoutsActivity, WorkoutDaysActivty::class.java)
-                        intent.putExtra("workoutDay", selectedDay)
-                        intent.putExtra("workoutDifficulty", selectedDay.workout?.difficulty)
-                        startActivity(intent)
+                        if (selectedDay.isRestDay) {
+                            // Redirect to RestDayActivity if it's a rest day
+                            val intent = Intent(this@WorkoutsActivity, RestDayActivity::class.java)
+                            startActivity(intent)
+                        } else {
+                            // Redirect to WorkoutDaysActivty if it's not a rest day
+                            val intent = Intent(this@WorkoutsActivity, WorkoutDaysActivty::class.java)
+                            intent.putExtra("workoutDay", selectedDay)
+                            intent.putExtra("workoutDifficulty", selectedDay.workout?.difficulty)
+                            startActivity(intent)
+                        }
                     }
                 } else {
                     // Log the error response

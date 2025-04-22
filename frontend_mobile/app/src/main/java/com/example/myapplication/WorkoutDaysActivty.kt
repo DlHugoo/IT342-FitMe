@@ -1,7 +1,9 @@
 package com.example.myapplication
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -34,6 +36,18 @@ class WorkoutDaysActivty : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        val backButton = findViewById<ImageView>(R.id.btn_back)
+        backButton.setOnClickListener {
+            finish() // Closes the current activity and returns to the previous one
+        }
+
+        val btnStart = findViewById<Button>(R.id.btn_start)
+        btnStart.setOnClickListener {
+            val intent = Intent(this, ExerciseActivity::class.java)
+            intent.putParcelableArrayListExtra("exercises", ArrayList(exercises))
+            startActivity(intent)
         }
 
         // Retrieve data passed via Intent

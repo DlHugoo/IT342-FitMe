@@ -19,6 +19,11 @@ class RestDayActivity : AppCompatActivity() {
             insets
         }
 
+        val backButton = findViewById<ImageView>(R.id.btnBack)
+        backButton.setOnClickListener {
+            finish() // Closes the current activity and returns to the previous one
+        }
+
         val gifImageView: ImageView = findViewById(R.id.imgRest)
         Glide.with(this)
             .asGif()
