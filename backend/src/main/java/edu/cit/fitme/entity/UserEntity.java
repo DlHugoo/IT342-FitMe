@@ -43,7 +43,8 @@ public class UserEntity implements UserDetails {
     private String googleAccessToken;
 
     @Column(name = "google_connected")
-    private boolean googleConnected = false;
+    private Boolean googleConnected = false;
+
 
     // ===== Getters & Setters =====
 
@@ -117,13 +118,14 @@ public class UserEntity implements UserDetails {
         this.googleAccessToken = googleAccessToken;
     }
 
-    public boolean isGoogleConnected() {
+    public Boolean getGoogleConnected() {
         return googleConnected;
     }
 
-    public void setGoogleConnected(boolean googleConnected) {
+    public void setGoogleConnected(Boolean googleConnected) {
         this.googleConnected = googleConnected;
     }
+
 
     // ===== UserDetails Implementation =====
 

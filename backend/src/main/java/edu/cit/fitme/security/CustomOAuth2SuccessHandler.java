@@ -51,30 +51,46 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
             return;
         }
 
-        // Save user if not exists
-        UserEntity user = userRepository.findByEmail(email)
-                .orElseGet(() -> {
-                    UserEntity newUser = new UserEntity();
-                    newUser.setEmail(email);
-                    newUser.setUsername(name);
-                    newUser.setRole("user");
-                    newUser.setPassword(passwordEncoder.encode("oauth2-login")); // Dummy password
-                    return userRepository.save(newUser);
-                });
+        // ✅ Create or update user using the shared UserEntity
+        UserEntity user = userRepository.findByEmail(email).orElse(null);
 
-        // 🔐 Get Google OAuth2 access token
+        if (user == null) {
+            // 🔹 New Google user
+            user = new UserEntity();
+            user.setEmail(email);
+            user.setUsername(name);
+            user.setRole("user");
+            user.setPassword(passwordEncoder.encode("oauth2-login")); // Dummy password
+            user.setGoogleConnected(true); // 🔐 Fix: explicitly set this
+            user = userRepository.save(user);
+        } else {
+            // 🔄 Existing user, update Google-connected status (if not already true)
+            if (user.getGoogleConnected() == null || !user.getGoogleConnected()) {
+                user.setGoogleConnected(true);
+                user = userRepository.save(user);
+            }
+        }
+
+        // 📝 Optional: Capture Google access token
         OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
         OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(
                 oauthToken.getAuthorizedClientRegistrationId(),
                 oauthToken.getName());
 
-        String accessToken = client.getAccessToken().getTokenValue();
-        System.out.println("🔑 Google Access Token: " + accessToken);
+        if (client != null && client.getAccessToken() != null) {
+            String accessToken = client.getAccessToken().getTokenValue();
+            System.out.println("🔑 Google Access Token: " + accessToken);
+            // Optionally save it:
+            user.setGoogleAccessToken(accessToken);
+            userRepository.save(user);
+        }
 
-        // ✅ Issue your own app's JWT
+        // 🔐 Issue JWT
         String jwtToken = jwtUtil.generateToken(user.getEmail(), user.getRole());
 
-        // Redirect to frontend (or success handler) with JWT
-        response.sendRedirect("/oauth2/success?token=" + jwtToken);
+        // 🌐 Redirect to frontend
+        String frontendRedirectUrl = "http://localhost:3000/oauth-success?token=" + jwtToken;
+        System.out.println("✅ OAuth login successful for " + email + ". Redirecting to: " + frontendRedirectUrl);
+        response.sendRedirect(frontendRedirectUrl);
     }
 }
