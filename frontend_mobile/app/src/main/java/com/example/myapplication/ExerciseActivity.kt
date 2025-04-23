@@ -8,6 +8,8 @@ import com.bumptech.glide.Glide
 import android.content.Intent
 import android.os.CountDownTimer
 import android.widget.TextView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.example.myapplication.model.WorkoutDayExercise
 
 class ExerciseActivity : AppCompatActivity() {
@@ -30,6 +32,11 @@ class ExerciseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_exercise)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.exercise)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         // Initialize views
         tvExerciseName = findViewById(R.id.tvExerciseName)
