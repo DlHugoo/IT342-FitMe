@@ -1,6 +1,6 @@
-//SecurityConfig
 package edu.cit.fitme.security;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -28,17 +28,14 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/uploads/**").permitAll()
-
-                        // 🔓 Public
+                        // 🔓 Public endpoints
+                        .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers("/oauth2/**", "/login/**").permitAll()
+                        .requestMatchers("/api/google/**").permitAll()
                         .requestMatchers("/api/users/encode/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
-                        .requestMatchers("/api/login").permitAll()
-                        .requestMatchers("/oauth2/**", "/login/**").permitAll() // ✅ Google OAuth2
-                        .requestMatchers("/api/google/**").permitAll()
 
-
-                        // 🔐 Secured
+                        // 🔐 Secured endpoints (your original setup)
                         .requestMatchers(HttpMethod.PUT, "/api/users").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/users/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/users/weight").hasAnyRole("USER", "ADMIN")
@@ -76,9 +73,17 @@ public class SecurityConfig {
 
                         .anyRequest().authenticated()
                 )
+                // 🛑 Prevent redirect loops for JWT endpoints (like Postman calls)
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.getWriter().write("Unauthorized - JWT required");
+                        })
+                )
+                .formLogin(form -> form.disable())
                 .oauth2Login(oauth2 -> oauth2
-                        .defaultSuccessUrl("/oauth2/success", true) // You can customize this route later
-                        .successHandler(customOAuth2SuccessHandler) // Inject the bean
+                        .loginPage("/oauth2/authorization/google") // ✅ Correct Spring-managed path
+                        .successHandler(customOAuth2SuccessHandler) // ✅ Your handler to generate JWT + redirect
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
