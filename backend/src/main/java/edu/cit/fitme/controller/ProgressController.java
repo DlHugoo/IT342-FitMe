@@ -19,15 +19,16 @@ public class ProgressController {
     @Autowired
     private ProgressService progressService;
 
-    // 🆕 Log today's workout
+    // 🆕 Log today's workout with token
     @PostMapping
     public ResponseEntity<ProgressEntity> logProgress(
             @RequestBody ProgressRequest request,
+            @RequestHeader("X-Access-Token") String accessToken,
             Principal principal) {
 
         UserEntity user = (UserEntity) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
 
-        return progressService.logProgress(user.getEmail(), request.getWorkoutId())
+        return progressService.logProgress(user.getEmail(), request.getWorkoutId(), accessToken)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -48,10 +49,11 @@ public class ProgressController {
                 .orElse(ResponseEntity.noContent().build());
     }
 
-    // ❌ Delete a log
+    // ❌ Delete progress (also from calendar)
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProgress(@PathVariable Long id) {
-        progressService.deleteProgressById(id);
+    public ResponseEntity<Void> deleteProgress(@PathVariable Long id,
+                                               @RequestHeader("X-Access-Token") String accessToken) {
+        progressService.deleteProgressById(id, accessToken);
         return ResponseEntity.noContent().build();
     }
 }
