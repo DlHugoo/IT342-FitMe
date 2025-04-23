@@ -14,10 +14,16 @@ public class WorkoutDayService {
 
     private final WorkoutDayRepository workoutDayRepository;
     private final WorkoutRepository workoutRepository;
+    private final GoogleCalendarService googleCalendarService;
 
-    public WorkoutDayService(WorkoutDayRepository workoutDayRepository, WorkoutRepository workoutRepository) {
+    public WorkoutDayService(
+            WorkoutDayRepository workoutDayRepository,
+            WorkoutRepository workoutRepository,
+            GoogleCalendarService googleCalendarService
+    ) {
         this.workoutDayRepository = workoutDayRepository;
         this.workoutRepository = workoutRepository;
+        this.googleCalendarService = googleCalendarService;
     }
 
     public List<WorkoutDayEntity> getAllDays() {
@@ -32,7 +38,7 @@ public class WorkoutDayService {
         return workoutDayRepository.findById(id);
     }
 
-    public WorkoutDayEntity createDay(WorkoutDayEntity day) {
+    public WorkoutDayEntity createDay(WorkoutDayEntity day, String accessToken) {
         Long workoutId = day.getWorkout().getWorkoutId();
         WorkoutEntity fullWorkout = workoutRepository.findById(workoutId)
                 .orElseThrow(() -> new RuntimeException("Workout not found with id: " + workoutId));
@@ -42,11 +48,21 @@ public class WorkoutDayService {
 
         WorkoutDayEntity savedDay = workoutDayRepository.save(day);
 
-        // 🔁 Update workout.days field after saving a day
+        // 🔁 Update workout day count
         updateWorkoutDayCount(workoutId);
+
+        // 🔄 Automatically sync to Google Calendar
+        try {
+            String calendarEventId = googleCalendarService.createCalendarEventForWorkoutDay(accessToken, savedDay);
+            savedDay.setCalendarEventId(calendarEventId);
+            savedDay = workoutDayRepository.save(savedDay);
+        } catch (Exception e) {
+            System.err.println("⚠️ Failed to sync with Google Calendar: " + e.getMessage());
+        }
 
         return savedDay;
     }
+
 
     public Optional<WorkoutDayEntity> updateDay(Long id, WorkoutDayEntity updatedDay) {
         return workoutDayRepository.findById(id).map(day -> {
@@ -57,18 +73,27 @@ public class WorkoutDayService {
         });
     }
 
-    public void deleteDay(Long id) {
+    public void deleteDay(Long id, String accessToken) {
         Optional<WorkoutDayEntity> maybeDay = workoutDayRepository.findById(id);
 
         maybeDay.ifPresent(day -> {
             Long workoutId = day.getWorkout().getWorkoutId();
+
+            // 🗑 Delete Google Calendar event if it exists
+            if (day.getCalendarEventId() != null) {
+                try {
+                    googleCalendarService.deleteEvent(accessToken, day.getCalendarEventId());
+                } catch (Exception e) {
+                    System.err.println("⚠️ Failed to delete Google Calendar event: " + e.getMessage());
+                }
+            }
+
             workoutDayRepository.deleteById(id);
-            // 🔁 Update workout.days field after deletion
             updateWorkoutDayCount(workoutId);
         });
     }
 
-    // ✅ Recalculate number of days for the workout and persist it
+
     private void updateWorkoutDayCount(Long workoutId) {
         List<WorkoutDayEntity> allDays = workoutDayRepository.findByWorkoutWorkoutId(workoutId);
         WorkoutEntity workout = workoutRepository.findById(workoutId)
@@ -76,5 +101,17 @@ public class WorkoutDayService {
 
         workout.setDays(allDays.size());
         workoutRepository.save(workout);
+    }
+
+    // ✅ Calendar sync
+    public Optional<WorkoutDayEntity> syncWorkoutDayToCalendar(Long dayId, String token) {
+        return workoutDayRepository.findById(dayId).map(day -> {
+            if (day.getCalendarEventId() == null) {
+                String calendarEventId = googleCalendarService.createCalendarEventForWorkoutDay(token, day);
+                day.setCalendarEventId(calendarEventId);
+                return workoutDayRepository.save(day);
+            }
+            return day;
+        });
     }
 }

@@ -18,6 +18,9 @@ public class ProgressEntity {
     @JoinColumn(name = "workout_id", nullable = false)
     private WorkoutEntity workout;
 
+    @Column(name = "calendar_event_id")
+    private String calendarEventId;
+
     private LocalDate date; // the day the workout was completed
 
     // Getters and setters
@@ -51,5 +54,13 @@ public class ProgressEntity {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public String getCalendarEventId() {
+        return calendarEventId;
+    }
+
+    public void setCalendarEventId(String calendarEventId) {
+        this.calendarEventId = calendarEventId;
     }
 }
