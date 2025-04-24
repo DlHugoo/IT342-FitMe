@@ -14,6 +14,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.myapplication.api.RetrofitClient
 import com.example.myapplication.model.User
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -201,12 +203,47 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun logoutUser() {
         val sharedPref = getSharedPreferences("user_prefs", MODE_PRIVATE)
+
+        // Store whether this is a Google user before clearing preferences
+        val isGoogleUser = sharedPref.getBoolean("google_login", false) ||
+                (sharedPref.getString("email", "")?.endsWith("@gmail.com") == true)
+
+        // Clear all user data from SharedPreferences
         with(sharedPref.edit()) {
-            remove("token") // Remove the stored token
-            remove("userId") // Remove the stored user ID
-            apply() // Apply changes
+            clear()  // Clear all preferences instead of removing individual keys
+            apply()
         }
 
+        // If user was logged in with Google, sign out from Google as well
+        if (isGoogleUser) {
+            try {
+                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken("450145433567-vdg3q71jbo8im80klnpb5eftmgh6h5j0.apps.googleusercontent.com")
+                    .requestEmail()
+                    .build()
+
+                val googleSignInClient = GoogleSignIn.getClient(this, gso)
+                googleSignInClient.signOut().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d("ProfileActivity", "Google Sign-Out successful")
+                    } else {
+                        Log.e("ProfileActivity", "Google Sign-Out failed", task.exception)
+                    }
+                    // Navigate to login regardless of sign-out success
+                    navigateToLogin()
+                }
+            } catch (e: Exception) {
+                Log.e("ProfileActivity", "Error during Google Sign-Out", e)
+                // If Google Sign-Out fails, still navigate to login
+                navigateToLogin()
+            }
+        } else {
+            // For regular users, just navigate to login
+            navigateToLogin()
+        }
+    }
+
+    private fun navigateToLogin() {
         // Navigate to LoginActivity and clear the back stack
         val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

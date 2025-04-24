@@ -99,14 +99,27 @@ public class GoogleOAuthController {
     // ✅ Verify Google ID token
     private GoogleIdToken.Payload verifyGoogleToken(String idTokenString) {
         try {
+            // First try to verify with Android client ID
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
                     new NetHttpTransport(), JacksonFactory.getDefaultInstance())
-                    .setAudience(Collections.singletonList(MOBILE_CLIENT_ID)) // ✅ Secure check
+                    .setAudience(Collections.singletonList(MOBILE_CLIENT_ID))
+                    .setIssuer("https://accounts.google.com")
                     .build();
 
             GoogleIdToken idToken = verifier.verify(idTokenString);
-            return idToken != null ? idToken.getPayload() : null;
 
+            // If verification fails with Android client ID, try with Web client ID
+            if (idToken == null) {
+                String WEB_CLIENT_ID = "450145433567-vdg3q71jbo8im80klnpb5eftmgh6h5j0.apps.googleusercontent.com";
+                verifier = new GoogleIdTokenVerifier.Builder(
+                        new NetHttpTransport(), JacksonFactory.getDefaultInstance())
+                        .setAudience(Collections.singletonList(WEB_CLIENT_ID))
+                        .setIssuer("https://accounts.google.com")
+                        .build();
+                idToken = verifier.verify(idTokenString);
+            }
+
+            return idToken != null ? idToken.getPayload() : null;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
