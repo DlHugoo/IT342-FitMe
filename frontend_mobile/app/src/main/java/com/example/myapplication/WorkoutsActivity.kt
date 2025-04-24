@@ -18,6 +18,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.text.get
 
 class WorkoutsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +50,18 @@ class WorkoutsActivity : AppCompatActivity() {
         navprofile.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
+        }
+
+        // Retrieve data from the Intent
+        val workoutDayId = intent.getLongExtra("workoutDayId", -1)
+        val workoutDayNumber = intent.getIntExtra("workoutDayNumber", -1)
+        val workoutDifficulty = intent.getStringExtra("workoutDifficulty")
+
+        // Use the data to update the UI
+        if (workoutDayId != -1L && workoutDayNumber != -1) {
+            // Update UI elements with the retrieved data
+            findViewById<TextView>(R.id.difficulty_title).text = "Day $workoutDayNumber"
+            findViewById<TextView>(R.id.difficulty_desc).text = workoutDifficulty
         }
 
         // Retrieve workout details passed via Intent
@@ -96,9 +109,25 @@ class WorkoutsActivity : AppCompatActivity() {
                         android.util.Log.d("WorkoutsActivity", "Day ${day.dayNumber}, isRestDay: ${day.isRestDay}")
                     }
 
-                    // Update the ListView with the workout days
+                    val listView = findViewById<ListView>(R.id.listViewDays)
                     val adapter = DayAdapter(this@WorkoutsActivity, daysList)
-                    findViewById<ListView>(R.id.listViewDays).adapter = adapter
+                    listView.adapter = adapter
+
+                    // Set an OnClickListener for each item
+                    listView.setOnItemClickListener { _, _, position, _ ->
+                        val selectedDay = daysList[position]
+                        if (selectedDay.isRestDay) {
+                            // Redirect to RestDayActivity if it's a rest day
+                            val intent = Intent(this@WorkoutsActivity, RestDayActivity::class.java)
+                            startActivity(intent)
+                        } else {
+                            // Redirect to WorkoutDaysActivty if it's not a rest day
+                            val intent = Intent(this@WorkoutsActivity, WorkoutDaysActivty::class.java)
+                            intent.putExtra("workoutDay", selectedDay)
+                            intent.putExtra("workoutDifficulty", selectedDay.workout?.difficulty)
+                            startActivity(intent)
+                        }
+                    }
                 } else {
                     // Log the error response
                     val errorJson = response.errorBody()?.string()

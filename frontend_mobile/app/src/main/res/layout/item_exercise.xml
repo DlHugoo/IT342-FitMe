@@ -3,40 +3,37 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="50dp"
+    android:padding="16dp"
     android:gravity="center_vertical">
 
     <ImageView
         android:id="@+id/iv_exercise"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@drawable/exercise_sample"
-        />
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/exercise_sample" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingStart="16dp">
 
         <TextView
             android:id="@+id/tv_exercise_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="High Stepping"
-            android:textSize="30sp"
-            android:textStyle="bold"/>
+            android:text="Exercise Name"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_exercise_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:text="00:20"
-            android:textColor="@color/blue"/>
+            android:text="Reps/Duration"
+            android:textSize="16sp"
+            android:textColor="@color/blue" />
     </LinearLayout>
 </LinearLayout>
-
-
-
-
