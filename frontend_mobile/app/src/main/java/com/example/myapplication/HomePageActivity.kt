@@ -67,19 +67,64 @@ class HomePageActivity : AppCompatActivity() {
 
     private fun loadUserWeight() {
         val token = sharedPref.getString("token", "") ?: ""
-        val userId = sharedPref.getLong("userId", -1L) // Assuming userId is stored in SharedPreferences
-
-        if (token.isEmpty() || userId == -1L) {
-            Toast.makeText(this, "Token or User ID not found, please login again", Toast.LENGTH_SHORT).show()
+        val email = sharedPref.getString("email", "") ?: ""
+        
+        if (token.isEmpty()) {
+            Toast.makeText(this, "Token not found, please login again", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
             return
         }
 
         val authHeader = "Bearer $token"
+        
+        // First try to get user by ID if available
+        val userId = sharedPref.getLong("userId", -1L)
+        if (userId != -1L) {
+            // Use existing userId if available
+            getUserById(userId, authHeader)
+        } else if (email.isNotEmpty()) {
+            // If no userId but we have email, get all users and find by email
+            // This is a workaround since we don't have a direct API to get user by email
+            RetrofitClient.instance.getAllUsers(authHeader).enqueue(object : Callback<List<User>> {
+                override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
+                    if (response.isSuccessful) {
+                        val users = response.body()
+                        val user = users?.find { it.email == email }
+                        if (user != null) {
+                            // Save the userId for future use
+                            with(sharedPref.edit()) {
+                                putLong("userId", user.id ?: -1L)
+                                apply()
+                            }
+                            // Update UI with user's weight
+                            val weight = user.weight ?: 0.0
+                            currentWeightTextView.text = "$weight kg"
+                        } else {
+                            Toast.makeText(this@HomePageActivity, "User not found", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Toast.makeText(this@HomePageActivity, "Failed to load user details", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<List<User>>, t: Throwable) {
+                    Toast.makeText(this@HomePageActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+        } else {
+            Toast.makeText(this, "User information not found, please login again", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
+    }
+    
+    private fun getUserById(userId: Long, authHeader: String) {
         RetrofitClient.instance.getUserById(userId, authHeader).enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful) {
                     val user = response.body()
-                    val weight = user?.weight ?: 0.0 // Assuming `weight` is a field in the `User` model
+                    val weight = user?.weight ?: 0.0
                     currentWeightTextView.text = "$weight kg"
                 } else {
                     Toast.makeText(this@HomePageActivity, "Failed to load user details", Toast.LENGTH_SHORT).show()

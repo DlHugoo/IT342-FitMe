@@ -35,7 +35,7 @@ interface ApiService {
     //USER
 
     // ✅ Login (still AuthController, unchanged)
-    @POST("/api/login")
+    @POST("/api/auth/login")
     fun loginUser(@Body request: LoginRequest): Call<LoginResponse>
 
     // ✅ Get all users (Admin only)
@@ -149,4 +149,29 @@ interface ApiService {
         @Path("id") exerciseId: Exercise, // Maps "exerciseId" in the app to "id" in the backend
         @Header("Authorization") token: String
     ): Call<Exercise>
+
+    //GOOGlE
+
+    // Google OAuth
+    @POST("/api/google/mobile-login")
+    fun loginFromMobile(
+        @Query("token")
+        idToken: String
+    ): Call<Map<String, String>>
+
+    @POST("/api/google/token")
+    fun saveGoogleToken(
+        @Header("Authorization") token: String,
+        @Query("token") googleToken: String
+    ): Call<Void>
+
+    @GET("/api/google/token")
+    fun getGoogleToken(
+        @Header("Authorization") token: String
+    ): Call<String>
+
+    @GET("/api/google/calendar/events")
+    fun listGoogleEvents(
+        @Header("Authorization") token: String
+    ): Call<String>
 }
