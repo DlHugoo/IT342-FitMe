@@ -8,124 +8,154 @@
     android:background="@color/light_blue"
     android:padding="16dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        >
+        android:layout_height="wrap_content">
 
         <!-- Logo -->
         <ImageView
+            android:id="@+id/logoImage"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/fitme_logo"
-            android:layout_marginTop="50dp" />
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- App Name -->
         <TextView
+            android:id="@+id/appName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="FITME"
             android:textColor="@color/blue"
             android:textSize="40sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/logoImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- Email Input -->
         <EditText
             android:id="@+id/emailInput"
-            android:layout_width="350dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:hint="Email"
             android:background="@drawable/input_bg"
             android:padding="12dp"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/appName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_percent="0.9" />
 
-
-        <!-- Last Name Input -->
+        <!-- Username Input -->
         <EditText
             android:id="@+id/userNameInput"
-            android:layout_width="350dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:hint="Username"
             android:background="@drawable/input_bg"
             android:padding="12dp"
-            android:layout_marginTop="15dp" />
+            android:layout_marginTop="15dp"
+            app:layout_constraintTop_toBottomOf="@id/emailInput"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_percent="0.9" />
 
         <!-- Password Input -->
         <EditText
             android:id="@+id/passwordInput"
-            android:layout_width="350dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:hint="Password"
             android:inputType="textPassword"
             android:background="@drawable/input_bg"
             android:padding="12dp"
-            android:layout_marginTop="15dp" />
+            android:layout_marginTop="15dp"
+            app:layout_constraintTop_toBottomOf="@id/userNameInput"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_percent="0.9" />
 
         <!-- Confirm Password Input -->
         <EditText
             android:id="@+id/confirmPasswordInput"
-            android:layout_width="350dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:hint="Confirm Password"
             android:inputType="textPassword"
             android:background="@drawable/input_bg"
             android:padding="12dp"
-            android:layout_marginTop="15dp" />
+            android:layout_marginTop="15dp"
+            app:layout_constraintTop_toBottomOf="@id/passwordInput"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_percent="0.9" />
 
         <!-- Sign Up Button -->
         <Button
             android:id="@+id/btnSignUp"
-            android:layout_width="330dp"
+            android:layout_width="0dp"
             android:layout_height="60dp"
             android:text="Sign Up"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:backgroundTint="@color/blue"
             android:textSize="20sp"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/confirmPasswordInput"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_percent="0.85" />
 
-
+        <!-- Google Sign In Button -->
         <LinearLayout
             android:id="@+id/googleSignInButton"
-            android:layout_width="330dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_below="@id/btnSignUp"
             android:orientation="horizontal"
             android:background="@drawable/google_button_bg"
             android:gravity="center"
-            android:paddingStart="48dp"
-            android:layout_marginTop="50dp"
-            android:layout_centerHorizontal="true">
+            android:paddingStart="30dp"
+            android:layout_marginTop="40dp"
+            app:layout_constraintTop_toBottomOf="@id/btnSignUp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_percent="0.85">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="-50dp"
+                android:layout_marginStart="-10dp"
                 android:gravity="center"
                 android:text="Sign in with Google"
                 android:textColor="@color/blue"
-                android:textSize="20sp"
-                android:textStyle="bold"/>
+                android:textSize="18sp"
+                />
 
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginStart="20dp"
-                android:src="@drawable/google_logo"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="40dp"
+                android:src="@drawable/google_logo" />
         </LinearLayout>
 
+        <!-- Login Link -->
         <TextView
             android:id="@+id/loginLink"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/googleSignInButton"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="80dp"
             android:text="Already have an account? Login"
             android:textColor="@color/blue"
-            android:textSize="16sp" />
-    </LinearLayout>
+            android:textSize="16sp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintTop_toBottomOf="@id/googleSignInButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
