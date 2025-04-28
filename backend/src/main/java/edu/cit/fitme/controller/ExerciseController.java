@@ -1,6 +1,7 @@
 package edu.cit.fitme.controller;
 
 import edu.cit.fitme.entity.ExerciseEntity;
+import edu.cit.fitme.service.CloudinaryService;
 import edu.cit.fitme.service.ExerciseService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -19,9 +20,11 @@ import java.util.UUID;
 public class ExerciseController {
 
     private final ExerciseService exerciseService;
+    private final CloudinaryService cloudinaryService;
 
-    public ExerciseController(ExerciseService exerciseService) {
+    public ExerciseController(ExerciseService exerciseService, CloudinaryService cloudinaryService) {
         this.exerciseService = exerciseService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @GetMapping
@@ -60,26 +63,8 @@ public class ExerciseController {
     @PostMapping("/upload-gif")
     public ResponseEntity<String> uploadGif(@RequestParam("file") MultipartFile file) {
         try {
-            // Set up the directory
-            String uploadDir = "uploads/gifs";
-            File dir = new File(uploadDir);
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-
-            // Generate a unique filename
-            String originalFileName = file.getOriginalFilename();
-            String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
-            String uniqueFileName = UUID.randomUUID().toString() + fileExtension;
-
-            // Save the file
-            Path filePath = Paths.get(uploadDir).resolve(uniqueFileName);
-            Files.write(filePath, file.getBytes());
-
-            // Return the relative path only (suitable for frontend/mobile)
-            String fileUrl = "/uploads/gifs/" + uniqueFileName;
-            return ResponseEntity.ok(fileUrl);
-
+            String url = cloudinaryService.uploadFile(file);
+            return ResponseEntity.ok(url);
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Upload failed");

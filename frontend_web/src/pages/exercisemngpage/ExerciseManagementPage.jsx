@@ -11,6 +11,7 @@ const ExerciseManagementPage = () => {
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [exerciseToDelete, setExerciseToDelete] = useState(null);
   const BASE_API_URL = import.meta.env.VITE_API_URL;
+  const [uploadingGif, setUploadingGif] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -107,6 +108,7 @@ const ExerciseManagementPage = () => {
     formDataUpload.append("file", file);
 
     try {
+      setUploadingGif(true); // 🔵 Start loader
       const response = await axios.post(
         "/api/exercises/upload-gif",
         formDataUpload,
@@ -127,6 +129,8 @@ const ExerciseManagementPage = () => {
       }
     } catch (error) {
       console.error("GIF upload failed", error);
+    } finally {
+      setUploadingGif(false); // 🛑 Stop loader after success or error
     }
   };
 
@@ -239,9 +243,9 @@ const ExerciseManagementPage = () => {
           title="Update Exercise"
           onClose={() => setShowModal(false)}
           onCancel={() => {
-            setFormData({ name: "", gifUrl: "" }); // Reset edit form
-            setSelectedExercise(null); // Clear selected
-            setShowModal(false); // Close modal
+            setFormData({ name: "", gifUrl: "" });
+            setSelectedExercise(null);
+            setShowModal(false);
           }}
           onSubmit={handleUpdate}
         >
@@ -257,16 +261,20 @@ const ExerciseManagementPage = () => {
             onChange={(e) => handleGifUpload(e, true)}
             className="w-full border border-gray-300 rounded p-2 mb-4"
           />
-          {formData.gifUrl && (
-            <img
-              src={
-                formData.gifUrl.startsWith("http")
-                  ? formData.gifUrl
-                  : `${BASE_API_URL}${formData.gifUrl}`
-              }
-              alt="Preview"
-              className="w-24 h-24 object-contain mb-4"
-            />
+          {uploadingGif ? (
+            <div className="text-center text-blue-500">Uploading GIF...</div>
+          ) : (
+            formData.gifUrl && (
+              <img
+                src={
+                  formData.gifUrl.startsWith("http")
+                    ? formData.gifUrl
+                    : `${BASE_API_URL}${formData.gifUrl}`
+                }
+                alt="Preview"
+                className="w-24 h-24 object-contain mb-4"
+              />
+            )
           )}
         </Modal>
       )}
@@ -277,8 +285,8 @@ const ExerciseManagementPage = () => {
           title="Add New Exercise"
           onClose={() => setShowAddModal(false)}
           onCancel={() => {
-            setNewExerciseData({ name: "", gifUrl: "" }); // Reset add form
-            setShowAddModal(false); // Close modal
+            setNewExerciseData({ name: "", gifUrl: "" });
+            setShowAddModal(false);
           }}
           onSubmit={handleAddExercise}
         >
@@ -299,16 +307,20 @@ const ExerciseManagementPage = () => {
             onChange={(e) => handleGifUpload(e, false)}
             className="w-full border border-gray-300 rounded p-2 mb-4"
           />
-          {newExerciseData.gifUrl && (
-            <img
-              src={
-                newExerciseData.gifUrl.startsWith("http")
-                  ? newExerciseData.gifUrl
-                  : `${BASE_API_URL}${newExerciseData.gifUrl}`
-              }
-              alt="Preview"
-              className="w-24 h-24 object-contain mb-4"
-            />
+          {uploadingGif ? (
+            <div className="text-center text-blue-500">Uploading GIF...</div>
+          ) : (
+            newExerciseData.gifUrl && (
+              <img
+                src={
+                  newExerciseData.gifUrl.startsWith("http")
+                    ? newExerciseData.gifUrl
+                    : `${BASE_API_URL}${newExerciseData.gifUrl}`
+                }
+                alt="Preview"
+                className="w-24 h-24 object-contain mb-4"
+              />
+            )
           )}
         </Modal>
       )}
