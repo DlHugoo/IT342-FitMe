@@ -238,6 +238,11 @@ const ExerciseManagementPage = () => {
         <Modal
           title="Update Exercise"
           onClose={() => setShowModal(false)}
+          onCancel={() => {
+            setFormData({ name: "", gifUrl: "" }); // Reset edit form
+            setSelectedExercise(null); // Clear selected
+            setShowModal(false); // Close modal
+          }}
           onSubmit={handleUpdate}
         >
           <input
@@ -271,6 +276,10 @@ const ExerciseManagementPage = () => {
         <Modal
           title="Add New Exercise"
           onClose={() => setShowAddModal(false)}
+          onCancel={() => {
+            setNewExerciseData({ name: "", gifUrl: "" }); // Reset add form
+            setShowAddModal(false); // Close modal
+          }}
           onSubmit={handleAddExercise}
         >
           <input
@@ -338,7 +347,7 @@ const ExerciseManagementPage = () => {
   );
 };
 
-const Modal = ({ title, onClose, onSubmit, children }) => (
+const Modal = ({ title, onClose, onSubmit, onCancel, children }) => (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div className="bg-white rounded shadow-lg w-96 relative">
       <div className="bg-blue-header text-white px-4 py-3 rounded-t flex justify-between items-center">
@@ -358,7 +367,7 @@ const Modal = ({ title, onClose, onSubmit, children }) => (
           </button>
           <button
             className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow"
-            onClick={onClose}
+            onClick={onCancel}
           >
             Cancel
           </button>
