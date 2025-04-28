@@ -31,7 +31,7 @@ const WorkoutManagementPage = () => {
       const workoutsWithDays = await Promise.all(
         res.data.map(async (workout) => {
           const daysRes = await axios.get(
-            `/api/workout-days/${workout.workoutId}`,
+            `/api/workout-days/workout/${workout.workoutId}`,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
