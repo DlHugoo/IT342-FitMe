@@ -34,6 +34,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/google/**").permitAll()
                         .requestMatchers("/api/users/encode/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
 
                         // 🔐 Secured endpoints (your original setup)
                         .requestMatchers(HttpMethod.PUT, "/api/users").hasAnyRole("USER", "ADMIN")
@@ -71,15 +72,13 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/weights").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/weights/**").hasRole("ADMIN")
 
-                        .anyRequest().authenticated()
-                )
+                        .anyRequest().authenticated())
                 // 🛑 Prevent redirect loops for JWT endpoints (like Postman calls)
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) -> {
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                             response.getWriter().write("Unauthorized - JWT required");
-                        })
-                )
+                        }))
                 .formLogin(form -> form.disable())
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/oauth2/authorization/google") // ✅ Correct Spring-managed path
