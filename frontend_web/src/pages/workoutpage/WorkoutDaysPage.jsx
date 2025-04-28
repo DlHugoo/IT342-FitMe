@@ -36,16 +36,26 @@ const WorkoutDaysPage = () => {
 
   const fetchWorkoutDays = async () => {
     const token = localStorage.getItem("token");
-    if (!token) return;
+    if (!token) {
+      console.warn("No token found. Cannot fetch workout days.");
+      return;
+    }
 
     try {
-      const res = await axios.get(`/api/workout-days/${id}`, {
+      const res = await axios.get(`/api/workout-days/workout/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const sorted = res.data.sort((a, b) => a.dayNumber - b.dayNumber);
-      setDays(sorted);
+
+      if (Array.isArray(res.data)) {
+        const sorted = res.data.sort((a, b) => a.dayNumber - b.dayNumber);
+        setDays(sorted);
+      } else {
+        console.error("Unexpected response format for workout days:", res.data);
+        setDays([]); // Clear the days if the data is invalid
+      }
     } catch (err) {
       console.error("Failed to fetch workout days", err);
+      setDays([]); // Also clear days on error
     }
   };
 

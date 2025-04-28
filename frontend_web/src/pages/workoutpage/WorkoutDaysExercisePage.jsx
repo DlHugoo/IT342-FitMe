@@ -5,7 +5,7 @@ import Sidebar from "../components/Sidebar";
 import Headerbar from "../components/Headerbar";
 
 const WorkoutDaysExercisePage = () => {
-  const { id, dayId } = useParams(); // id = workoutId
+  const { id, dayId } = useParams();
   const [exercises, setExercises] = useState([]);
   const [dayNumber, setDayNumber] = useState(null);
   const [workoutTitle, setWorkoutTitle] = useState("");
@@ -22,35 +22,30 @@ const WorkoutDaysExercisePage = () => {
     fetchWorkoutDay();
     fetchDayExercises();
     fetchWorkoutTitle();
-    fetchAllExercises(); // 👈 new
+    fetchAllExercises();
   }, [dayId, id]);
 
   const fetchWorkoutDay = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
-
     try {
-      const res = await axios.get(`/api/workout-days/day/${dayId}`, {
+      const res = await axios.get(`/api/workout-days/${dayId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setDayNumber(res.data.dayNumber);
     } catch (err) {
       console.error("Failed to fetch workout day", err);
-      setDayNumber("Unknown");
     }
   };
 
   const fetchDayExercises = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
-
     try {
       const res = await axios.get(`/api/day-exercises/${dayId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      const sorted = res.data.sort((a, b) => a.id - b.id);
-      setExercises(sorted);
+      setExercises(res.data.sort((a, b) => a.id - b.id));
     } catch (err) {
       console.error("Failed to fetch exercises", err);
       setExercises([]);
@@ -60,7 +55,6 @@ const WorkoutDaysExercisePage = () => {
   const fetchWorkoutTitle = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
-
     try {
       const res = await axios.get(`/api/workouts/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -74,7 +68,6 @@ const WorkoutDaysExercisePage = () => {
   const fetchAllExercises = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
-
     try {
       const res = await axios.get(`/api/exercises`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -85,20 +78,14 @@ const WorkoutDaysExercisePage = () => {
     }
   };
 
-  const handleEdit = (exercise) => {
-    console.log("Edit clicked for:", exercise);
-    // TODO: Open modal for editing exercise
-  };
-
   const handleDelete = async (exerciseId) => {
     const token = localStorage.getItem("token");
     if (!token) return;
-
     try {
       await axios.delete(`/api/day-exercises/${exerciseId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      fetchDayExercises(); // Refresh list
+      fetchDayExercises();
     } catch (err) {
       console.error("Failed to delete exercise", err);
     }
@@ -107,7 +94,6 @@ const WorkoutDaysExercisePage = () => {
   const handleAddExercise = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
-
     try {
       await axios.post(
         "/api/day-exercises",
@@ -117,18 +103,15 @@ const WorkoutDaysExercisePage = () => {
           reps: parseInt(newExercise.reps),
           duration: parseInt(newExercise.duration),
         },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-
       setShowAddModal(false);
       setNewExercise({
         exercise: { exerciseId: null },
         reps: "",
         duration: "",
       });
-      fetchDayExercises(); // refresh table
+      fetchDayExercises();
     } catch (err) {
       console.error("Failed to add exercise", err);
     }
@@ -139,16 +122,15 @@ const WorkoutDaysExercisePage = () => {
       <Sidebar />
       <div className="ml-60 flex flex-col flex-grow">
         <Headerbar />
-
         <div className="bg-blue-header2 text-white px-4 pb-0">
           <div className="inline-block px-4 py-2">
             <Link to="/workout" className="hover:underline">
               Workouts
-            </Link>{" "}
+            </Link>
             <span className="mx-2">›</span>
             <Link to={`/workout/${id}`} className="hover:underline">
               {workoutTitle || "Loading..."}
-            </Link>{" "}
+            </Link>
             <span className="mx-2">›</span>
             Day {dayNumber ?? dayId}
           </div>
@@ -196,22 +178,12 @@ const WorkoutDaysExercisePage = () => {
                       <td className="py-4 px-6">{ex.reps ?? "—"}</td>
                       <td className="py-4 px-6">{ex.duration ?? "—"}</td>
                       <td className="py-4 px-6">
-                        <div className="flex items-center gap-4">
-                          <button
-                            className="text-blue-500 hover:text-blue-700"
-                            onClick={() => handleEdit(ex)}
-                            title="Edit"
-                          >
-                            <EditIcon />
-                          </button>
-                          <button
-                            className="text-red-500 hover:text-red-700"
-                            onClick={() => handleDelete(ex.id)}
-                            title="Delete"
-                          >
-                            <DeleteIcon />
-                          </button>
-                        </div>
+                        <button
+                          className="text-red-500 hover:text-red-700"
+                          onClick={() => handleDelete(ex.id)}
+                        >
+                          <DeleteIcon />
+                        </button>
                       </td>
                     </tr>
                   ))
@@ -228,14 +200,12 @@ const WorkoutDaysExercisePage = () => {
         </div>
       </div>
 
-      {/* Add Exercise Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg p-6 w-96">
             <h2 className="text-lg font-semibold mb-4 text-blue-header">
               Add Exercise
             </h2>
-
             <label className="block mb-2 text-sm font-medium">
               Select Exercise
             </label>
@@ -301,24 +271,6 @@ const WorkoutDaysExercisePage = () => {
     </div>
   );
 };
-
-// Icon Components
-const EditIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="h-5 w-5"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-    />
-  </svg>
-);
 
 const DeleteIcon = () => (
   <svg
