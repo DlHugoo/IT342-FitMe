@@ -27,15 +27,23 @@ const WorkoutDaysExercisePage = () => {
 
   const fetchWorkoutDay = async () => {
     const token = localStorage.getItem("token");
-    if (!token) return;
+
+    if (!token) {
+      console.error("No token found. Cannot fetch workout day.");
+      setDayNumber("Unknown");
+      return;
+    }
 
     try {
-      const res = await axios.get(`/api/workout-days/day/${dayId}`, {
+      const res = await axios.get(`/api/workout-days/${dayId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setDayNumber(res.data.dayNumber);
     } catch (err) {
-      console.error("Failed to fetch workout day", err);
+      console.error(
+        "Failed to fetch workout day",
+        err.response?.data || err.message
+      );
       setDayNumber("Unknown");
     }
   };
