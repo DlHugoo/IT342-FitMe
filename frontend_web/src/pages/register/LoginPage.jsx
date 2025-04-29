@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import FitmeLogo from "../../assets/FitmeLogo.png";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../../api/axiosInstance";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -27,13 +27,10 @@ const LoginPage = () => {
     setError(null);
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/login`,
-        {
-          email: formValues.email,
-          password: formValues.password,
-        }
-      );
+      const response = await axios.post("/api/auth/login", {
+        email: formValues.email,
+        password: formValues.password,
+      });
 
       const { token, role } = response.data;
 
