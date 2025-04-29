@@ -1,6 +1,8 @@
 package com.example.myapplication
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -30,5 +32,12 @@ class RestDayActivity : AppCompatActivity() {
             .load(R.drawable.ic_rest) // Or use .load(R.raw.fun_dance) if in raw folder
             .into(gifImageView)
 
+        val finishedButton = findViewById<Button>(R.id.btn_finished)
+        finishedButton.setOnClickListener {
+            // Create an intent to navigate to HomePageActivity
+            val intent = Intent(this, HomePageActivity::class.java)
+            startActivity(intent)
+            finish() // Close this activity to prevent it from staying in the back stack
+        }
     }
 }

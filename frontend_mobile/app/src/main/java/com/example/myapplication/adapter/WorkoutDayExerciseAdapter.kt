@@ -22,7 +22,7 @@ class WorkoutDayExerciseAdapter(
     private val exercises: List<WorkoutDayExercise>
 ) : RecyclerView.Adapter<WorkoutDayExerciseAdapter.ExerciseViewHolder>() {
 
-    private val BASE_URL = "http://10.0.2.2:8080"
+    private val BASE_URL = "https://metal-cable-458215-n5.as.r.appspot.com"
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_exercise, parent, false)

@@ -46,8 +46,11 @@
         android:hint="Email"
         android:background="@drawable/input_bg"
         android:paddingLeft="12dp"
-        android:textColorHint="@color/gray"/>
+        android:textColorHint="#404040"
+        android:textColor="#000000"/>
 
+
+    <!-- Password Input -->
     <!-- Password Input -->
     <EditText
         android:id="@+id/passwordInput"
@@ -61,8 +64,10 @@
         android:hint="Password"
         android:background="@drawable/input_bg"
         android:paddingLeft="12dp"
-        android:textColorHint="@color/gray"
+        android:textColorHint="#404040"
+        android:textColor="#000000"
         android:inputType="textPassword"/>
+
 
     <!-- Login Button -->
     <Button

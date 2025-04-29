@@ -69,7 +69,7 @@
         android:id="@+id/tv_exercise_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="5"
+        android:text="0"
         android:textSize="32sp"
         android:textStyle="bold"
         android:textColor="@android:color/black"
@@ -84,6 +84,7 @@
         android:layout_height="wrap_content"
         android:text="Exercises"
         android:textSize="16sp"
+        android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@id/tv_exercise_count"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
