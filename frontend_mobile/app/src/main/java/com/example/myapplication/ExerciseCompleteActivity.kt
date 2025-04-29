@@ -11,9 +11,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import android.widget.Toast
+import android.util.Log
 import com.example.myapplication.api.RetrofitClient
+import com.example.myapplication.api.WeightLogEntity
 import com.example.myapplication.api.WeightUpdateRequest
 import com.example.myapplication.model.User
+import com.example.myapplication.model.WeightLog
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -131,6 +134,9 @@ class ExerciseCompleteActivity : AppCompatActivity() {
                         weightValueTextView.isEnabled = false
                         updateWeightButton.text = "Update"
                         isEditing = false
+
+                        // Log the weight to update the graph in StatsPageActivity
+                        logWeight(weight, bearerToken)
                     } else {
                         Toast.makeText(this@ExerciseCompleteActivity, "Failed to update weight", Toast.LENGTH_SHORT).show()
                     }
@@ -142,4 +148,20 @@ class ExerciseCompleteActivity : AppCompatActivity() {
             })
     }
 
+    private fun logWeight(weight: Double, bearerToken: String) {
+        RetrofitClient.instance.logWeight(bearerToken, WeightLogEntity(weight))
+            .enqueue(object : Callback<WeightLog> {
+                override fun onResponse(call: Call<WeightLog>, response: Response<WeightLog>) {
+                    if (response.isSuccessful) {
+                        Log.d("ExerciseComplete", "Weight logged successfully")
+                    } else {
+                        Log.e("ExerciseComplete", "Failed to log weight")
+                    }
+                }
+
+                override fun onFailure(call: Call<WeightLog>, t: Throwable) {
+                    Log.e("ExerciseComplete", "Error logging weight", t)
+                }
+            })
+    }
 }
