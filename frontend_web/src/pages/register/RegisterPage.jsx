@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FitmeLogo from "../../assets/FitmeLogo.png";
-import axios from "axios"; // Make sure to install axios: npm install axios
+import axios from "../../api/axiosInstance";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
