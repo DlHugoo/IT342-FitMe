@@ -74,7 +74,12 @@
                     android:id="@+id/calendar_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal" />
+                    android:layout_gravity="center_horizontal"
+                    android:dateTextAppearance="@style/CalendarDateTextAppearance"
+                    android:weekDayTextAppearance="@style/CalendarWeekDayTextAppearance"
+                    android:background="@color/light_blue"
+                    android:focusedMonthDateColor="#000000"
+                    android:unfocusedMonthDateColor="#444444" />
             </LinearLayout>
 
             <!-- ⚖️ Weight Section -->

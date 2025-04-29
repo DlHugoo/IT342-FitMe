@@ -111,7 +111,7 @@ class ExerciseActivity : AppCompatActivity() {
         tvExerciseName.text = exercise.exerciseName ?: "Unknown Exercise"
 
         // Prepend BASE_URL to gifUrl if it's a relative path
-        val BASE_URL = "http://10.0.2.2:8080"
+        val BASE_URL = "https://metal-cable-458215-n5.as.r.appspot.com"
         val fullGifUrl = if (exercise.gifUrl?.startsWith("/") == true) {
             BASE_URL + exercise.gifUrl
         } else {

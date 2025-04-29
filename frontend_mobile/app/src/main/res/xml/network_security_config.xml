@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">10.0.2.2</domain>
+        <domain includeSubdomains="true">metal-cable-458215-n5.as.r.appspot.com</domain>
         <domain includeSubdomains="true">localhost</domain>
     </domain-config>
 </network-security-config>
