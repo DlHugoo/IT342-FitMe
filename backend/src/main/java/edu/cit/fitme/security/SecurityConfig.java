@@ -26,6 +26,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors() // 🔥 Fix CORS issues!
+                .and()
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         // 🔓 Public endpoints
@@ -36,7 +38,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
 
-                        // 🔐 Secured endpoints (your original setup)
+                        // 🔐 Secured endpoints
                         .requestMatchers(HttpMethod.PUT, "/api/users").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/users/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/users/weight").hasAnyRole("USER", "ADMIN")
@@ -72,8 +74,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/weights").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/weights/**").hasRole("ADMIN")
 
-                        .anyRequest().authenticated())
-                // 🛑 Prevent redirect loops for JWT endpoints (like Postman calls)
+                        .anyRequest().authenticated()
+                )
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) -> {
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -81,8 +83,8 @@ public class SecurityConfig {
                         }))
                 .formLogin(form -> form.disable())
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/oauth2/authorization/google") // ✅ Correct Spring-managed path
-                        .successHandler(customOAuth2SuccessHandler) // ✅ Your handler to generate JWT + redirect
+                        .loginPage("/oauth2/authorization/google")
+                        .successHandler(customOAuth2SuccessHandler)
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
