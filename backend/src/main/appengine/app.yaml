@@ -1,0 +1,9 @@
+runtime: java17
+instance_class: F1
+
+env_variables:
+  GOOGLE_CLIENT_ID: "450145433567-vdg3q71jbo8im80klnpb5eftmgh6h5j0.apps.googleusercontent.com"
+  GOOGLE_CLIENT_SECRET: "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"
+  CLOUDINARY_CLOUD_NAME: "dy51fztyr"
+  CLOUDINARY_API_KEY: "849383187327428"
+  CLOUDINARY_API_SECRET: "Mq7Z6Ufb3J9dGmZbPn88RExV47s"
