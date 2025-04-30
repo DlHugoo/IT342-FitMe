@@ -9,6 +9,7 @@ import ExerciseManagementPage from "./pages/exercisemngpage/ExerciseManagementPa
 import WorkoutManagementPage from "./pages/workoutpage/WorkoutManagementPage";
 import WorkoutDaysPage from "./pages/workoutpage/WorkoutDaysPage";
 import WorkoutDaysExercisePage from "./pages/workoutpage/WorkoutDaysExercisePage";
+import AdminRoute from "./route/AdminRoute";
 
 function App() {
   return (
@@ -19,13 +20,47 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/download" element={<DownloadPage />} />
         <Route path="/aboutus" element={<AboutUsPage />} />
-        <Route path="/user" element={<UserManagementPage />} />
-        <Route path="/exercise" element={<ExerciseManagementPage />} />
-        <Route path="/workout" element={<WorkoutManagementPage />} />
-        <Route path="/workout/:id" element={<WorkoutDaysPage />} />
+
+        {/* 🔒 Admin-only routes */}
+        <Route
+          path="/user"
+          element={
+            <AdminRoute>
+              <UserManagementPage />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/exercise"
+          element={
+            <AdminRoute>
+              <ExerciseManagementPage />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/workout"
+          element={
+            <AdminRoute>
+              <WorkoutManagementPage />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/workout/:id"
+          element={
+            <AdminRoute>
+              <WorkoutDaysPage />
+            </AdminRoute>
+          }
+        />
         <Route
           path="/workout/:id/days/:dayId"
-          element={<WorkoutDaysExercisePage />}
+          element={
+            <AdminRoute>
+              <WorkoutDaysExercisePage />
+            </AdminRoute>
+          }
         />
       </Routes>
     </Router>
