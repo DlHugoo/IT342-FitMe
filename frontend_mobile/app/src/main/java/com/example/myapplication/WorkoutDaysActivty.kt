@@ -25,6 +25,7 @@ class WorkoutDaysActivty : AppCompatActivity() {
 
     private lateinit var exerciseAdapter: WorkoutDayExerciseAdapter
     private val exercises = mutableListOf<WorkoutDayExercise>()
+    private lateinit var workoutDay: WorkoutDay  // Add this line to declare workoutDay at class level
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,26 +39,31 @@ class WorkoutDaysActivty : AppCompatActivity() {
             insets
         }
 
+        // Retrieve data passed via Intent
+        val receivedWorkoutDay = intent.getParcelableExtra<WorkoutDay>("workoutDay")
+        val workoutDifficulty = intent.getStringExtra("workoutDifficulty") ?: "Unknown"
+
+        if (receivedWorkoutDay == null) {
+            Log.e("WorkoutDaysActivty", "WorkoutDay is null. Exiting activity.")
+            finish()
+            return
+        }
+        
+        // Assign to class-level variable
+        workoutDay = receivedWorkoutDay
+
         val backButton = findViewById<ImageView>(R.id.btn_back)
         backButton.setOnClickListener {
             finish() // Closes the current activity and returns to the previous one
         }
 
         val btnStart = findViewById<Button>(R.id.btn_start)
+        // When starting the ExerciseActivity, add the workoutDayId to the intent
         btnStart.setOnClickListener {
             val intent = Intent(this, ExerciseActivity::class.java)
             intent.putParcelableArrayListExtra("exercises", ArrayList(exercises))
+            intent.putExtra("workoutDayId", workoutDay.dayId)
             startActivity(intent)
-        }
-
-        // Retrieve data passed via Intent
-        val workoutDay = intent.getParcelableExtra<WorkoutDay>("workoutDay")
-        val workoutDifficulty = intent.getStringExtra("workoutDifficulty") ?: "Unknown"
-
-        if (workoutDay == null) {
-            Log.e("WorkoutDaysActivty", "WorkoutDay is null. Exiting activity.")
-            finish()
-            return
         }
 
         // Set header information
