@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <!-- Logo and App Name -->
+    <!-- Logo and App Name - Fixed at top -->
     <LinearLayout
         android:id="@+id/header_layout"
         android:layout_width="wrap_content"
@@ -37,7 +37,7 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- Back and Logout Button -->
+    <!-- Back and Logout Button - Fixed below logo -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/btn_back_logout"
         android:layout_width="0dp"
@@ -71,50 +71,77 @@
             app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Profile Title -->
-    <TextView
-        android:id="@+id/profile_header"
+    <!-- Bottom Navigation Bar - Fixed at bottom -->
+    <LinearLayout
+        android:id="@+id/bottom_nav"
         android:layout_width="0dp"
-        android:layout_height="80dp"
-        app:layout_constraintTop_toBottomOf="@id/btn_back_logout"
+        android:layout_height="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintWidth_percent="0.9"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/button_bg_pressed"
-        android:gravity="center"
-        android:padding="12dp"
-        android:text="User Profile"
-        android:textColor="@color/white"
-        android:textSize="35sp"
-        android:textStyle="bold" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:elevation="8dp">
+        
+        <!-- Home Button -->
+        <LinearLayout
+            android:id="@+id/nav_home"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+        
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_home" />
+        </LinearLayout>
+        
+        <!-- Stats Button -->
+        <LinearLayout
+            android:id="@+id/nav_stats"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+        
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_calendar" />
+        </LinearLayout>
+        
+        <!-- Profile Button -->
+        <LinearLayout
+            android:id="@+id/nav_profile"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+        
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_profile" />
+        </LinearLayout>
+    </LinearLayout>
 
-    <!-- Reset Progress Button - Repositioned with proper margins -->
-    <Button
-        android:id="@+id/btn_reset_progress"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/button_selector"
-        android:text="Reset Progress"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:backgroundTint="@null"
-        app:layout_constraintTop_toBottomOf="@id/profile_header"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.6" />
-
+    <!-- Scrollable Content - Between header and bottom nav -->
+    <!-- Scrollable Content - Only the profile form section -->
     <ScrollView
-        android:id="@+id/profile_scroll"
-        android:layout_width="0dp"
+        android:id="@+id/profile_scroll_container"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:fillViewport="true"
+        android:focusableInTouchMode="true"
         app:layout_constraintTop_toBottomOf="@id/btn_reset_progress"
-        app:layout_constraintBottom_toTopOf="@id/btn_edit"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp">
+        app:layout_constraintBottom_toTopOf="@id/btn_edit">
 
         <LinearLayout
             android:id="@+id/profile_section"
@@ -130,8 +157,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Username"
-                android:textColor="@color/blue"
-                />
+                android:textColor="@color/blue" />
 
             <EditText
                 android:id="@+id/usernameInput"
@@ -142,16 +168,17 @@
                 android:enabled="false"
                 android:padding="8dp"
                 android:textColor="#000000"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="6dp"/>
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="6dp"
+                android:inputType="text"
+                android:imeOptions="actionNext"/>
 
             <!-- Email Field -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Email"
-                android:textColor="@color/blue"
-                />
+                android:textColor="@color/blue" />
 
             <EditText
                 android:id="@+id/emailInput"
@@ -162,16 +189,17 @@
                 android:enabled="false"
                 android:padding="8dp"
                 android:textColor="#000000"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="6dp"/>
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="6dp"
+                android:inputType="textEmailAddress"
+                android:imeOptions="actionNext"/>
 
             <!-- Password Field -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Password"
-                android:textColor="@color/blue"
-                />
+                android:textColor="@color/blue" />
 
             <EditText
                 android:id="@+id/passwordInput"
@@ -182,8 +210,10 @@
                 android:enabled="false"
                 android:padding="8dp"
                 android:textColor="#000000"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="6dp"/>
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="6dp"
+                android:inputType="textPassword"
+                android:imeOptions="actionNext"/>
 
             <!-- Age and Height Section -->
             <LinearLayout
@@ -203,8 +233,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Age"
-                        android:textColor="@color/blue"
-                         />
+                        android:textColor="@color/blue" />
 
                     <EditText
                         android:id="@+id/ageInput"
@@ -215,8 +244,10 @@
                         android:enabled="false"
                         android:padding="8dp"
                         android:textColor="#000000"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginTop="6dp"/>
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginTop="6dp"
+                        android:inputType="number"
+                        android:imeOptions="actionNext"/>
                 </LinearLayout>
 
                 <!-- Height Field -->
@@ -231,8 +262,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Height (m)"
-                        android:textColor="@color/blue"
-                        />
+                        android:textColor="@color/blue" />
 
                     <EditText
                         android:id="@+id/heightInput"
@@ -243,13 +273,55 @@
                         android:text="0"
                         android:padding="8dp"
                         android:textColor="#000000"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginTop="6dp"/>
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginTop="6dp"
+                        android:inputType="numberDecimal"
+                        android:imeOptions="actionDone"/>
                 </LinearLayout>
             </LinearLayout>
+            
+            <!-- Add extra padding at the bottom to ensure scrollability when keyboard is open -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="100dp"/>
         </LinearLayout>
     </ScrollView>
+    
+    <!-- Profile Title - Fixed above scrollable content -->
+    <TextView
+        android:id="@+id/profile_header"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_back_logout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.9"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_bg_pressed"
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="User Profile"
+        android:textColor="@color/white"
+        android:textSize="35sp"
+        android:textStyle="bold" />
 
+    <!-- Reset Progress Button - Fixed below profile title -->
+    <Button
+        android:id="@+id/btn_reset_progress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_selector"
+        android:text="Reset Progress"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:backgroundTint="@null"
+        app:layout_constraintTop_toBottomOf="@id/profile_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.6" />
+
+    <!-- Edit Button - Fixed above bottom nav -->
     <Button
         android:id="@+id/btn_edit"
         android:layout_width="0dp"
@@ -262,67 +334,6 @@
         app:layout_constraintBottom_toTopOf="@id/bottom_nav"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="16dp"
         android:textSize="20sp"/>
-
-    <!-- Bottom Navigation Bar -->
-    <LinearLayout
-        android:id="@+id/bottom_nav"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="horizontal"
-        android:background="#FFFFFF"
-        android:elevation="8dp">
-
-        <!-- Home Button -->
-        <LinearLayout
-            android:id="@+id/nav_home"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_home" />
-        </LinearLayout>
-
-        <!-- Stats Button -->
-        <LinearLayout
-            android:id="@+id/nav_stats"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_calendar" />
-        </LinearLayout>
-
-        <!-- Profile Button -->
-        <LinearLayout
-            android:id="@+id/nav_profile"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_profile" />
-        </LinearLayout>
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
