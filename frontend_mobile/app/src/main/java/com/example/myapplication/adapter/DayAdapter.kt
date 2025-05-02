@@ -9,34 +9,47 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.myapplication.R
 import com.example.myapplication.model.WorkoutDay
+import com.example.myapplication.util.CompletedWorkoutsManager
 
-class DayAdapter(private val context: Context, private val days: List<WorkoutDay>) :
-    ArrayAdapter<WorkoutDay>(context, 0, days) {
+class DayAdapter(
+    context: Context,
+    private val days: List<WorkoutDay>
+) : ArrayAdapter<WorkoutDay>(context, 0, days) {
+
+    private val completedWorkoutsManager = CompletedWorkoutsManager(context)
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.item_day, parent, false)
+        val view = convertView ?: LayoutInflater.from(context)
+            .inflate(R.layout.item_day, parent, false)
 
-        val dayText = view.findViewById<TextView>(R.id.tvDay)
+        val day = days[position]
+
         val restText = view.findViewById<TextView>(R.id.tvRest)
+        
+        val tvDay = view.findViewById<TextView>(R.id.tvDay)
+        val tvRest = view.findViewById<TextView>(R.id.tvRest)
         val checkIcon = view.findViewById<ImageView>(R.id.checkIcon)
-
-        val workoutDays = days[position]
-
-        // Set the day number
-        dayText.text = "Day ${workoutDays.dayNumber}"
-
-        if (workoutDays.isRestDay) {
-            restText.visibility = View.VISIBLE
+        
+        tvDay.text = "Day ${day.dayNumber}"
+        
+        if (day.isRestDay) {
+            tvRest.visibility = View.VISIBLE
             restText.text = "REST"
             checkIcon.visibility = View.GONE
         } else {
-            restText.visibility = View.GONE
-            checkIcon.visibility = View.VISIBLE
+            tvRest.visibility = View.GONE
         }
-
+        
+        // Check if this workout day is completed
+        if (completedWorkoutsManager.isWorkoutDayCompleted(day.dayId)) {
+            // Set the check icon to blue
+            checkIcon.setColorFilter(context.resources.getColor(R.color.blue))
+        } else {
+            // Reset to default white color
+            checkIcon.clearColorFilter()
+        }
+        
         return view
-
-
     }
 }
 

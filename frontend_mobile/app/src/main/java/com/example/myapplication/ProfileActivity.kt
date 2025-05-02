@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.myapplication.api.RetrofitClient
 import com.example.myapplication.model.User
+import com.example.myapplication.util.CompletedWorkoutsManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import retrofit2.Call
@@ -29,6 +30,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var heightInput: EditText
     private lateinit var btnEdit: Button
     private lateinit var btnLogout: Button
+    private lateinit var btnResetProgress: Button
 
 
     private var isEditMode = false
@@ -51,7 +53,8 @@ class ProfileActivity : AppCompatActivity() {
         ageInput = findViewById(R.id.ageInput)
         heightInput = findViewById(R.id.heightInput)
         btnEdit = findViewById(R.id.btn_edit)
-        btnLogout= findViewById(R.id.btn_logout)
+        btnLogout = findViewById(R.id.btn_logout)
+        btnResetProgress = findViewById(R.id.btn_reset_progress)
 
         val btnBack: ImageView = findViewById(R.id.btn_back)
 
@@ -98,6 +101,10 @@ class ProfileActivity : AppCompatActivity() {
             logoutUser()
         }
 
+        // Set up reset progress button click listener
+        btnResetProgress.setOnClickListener {
+            resetWorkoutProgress()
+        }
     }
 
     private fun loadUserProfile() {
@@ -251,4 +258,14 @@ class ProfileActivity : AppCompatActivity() {
         finish()
     }
 
+    private fun resetWorkoutProgress() {
+        // Create an instance of CompletedWorkoutsManager
+        val completedWorkoutsManager = CompletedWorkoutsManager(this)
+        
+        // Clear all completed workouts
+        completedWorkoutsManager.clearAllCompletedWorkouts()
+        
+        // Show a success message
+        Toast.makeText(this, "Workout progress has been reset", Toast.LENGTH_SHORT).show()
+    }
 }

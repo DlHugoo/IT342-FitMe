@@ -11,11 +11,13 @@ import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.myapplication.model.WorkoutDayExercise
+import com.example.myapplication.util.CompletedWorkoutsManager
 
 class ExerciseActivity : AppCompatActivity() {
 
     private lateinit var exercises: List<WorkoutDayExercise>
     private var currentIndex = 0
+    private var workoutDayId: Long = -1
 
     private lateinit var tvExerciseName: TextView
     private lateinit var tvTimerOrReps: TextView
@@ -27,6 +29,7 @@ class ExerciseActivity : AppCompatActivity() {
     private var countDownTimer: CountDownTimer? = null
     private var remainingTimeInMillis: Long = 0L
     private var isPaused = false
+    private lateinit var completedWorkoutsManager: CompletedWorkoutsManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +41,9 @@ class ExerciseActivity : AppCompatActivity() {
             insets
         }
 
+        // Initialize the CompletedWorkoutsManager
+        completedWorkoutsManager = CompletedWorkoutsManager(this)
+
         // Initialize views
         tvExerciseName = findViewById(R.id.tvExerciseName)
         tvTimerOrReps = findViewById(R.id.tvTimer)
@@ -48,6 +54,9 @@ class ExerciseActivity : AppCompatActivity() {
 
         // Retrieve the list of exercises from the Intent
         exercises = intent.getParcelableArrayListExtra("exercises") ?: emptyList()
+        
+        // Get the workout day ID from the intent
+        workoutDayId = intent.getLongExtra("workoutDayId", -1)
 
         if (exercises.isEmpty()) {
             finish() // Exit if no exercises are provided
@@ -71,10 +80,17 @@ class ExerciseActivity : AppCompatActivity() {
                 currentIndex++
                 displayExercise(currentIndex) // Display the next exercise
             } else {
+                // Mark the workout day as completed
+                if (workoutDayId != -1L) {
+                    completedWorkoutsManager.markWorkoutDayAsCompleted(workoutDayId)
+                }
+                
                 // Redirect to Exercise Complete page
                 val intent = Intent(this, ExerciseCompleteActivity::class.java)
                 intent.putParcelableArrayListExtra("exercises", ArrayList(exercises))
+                intent.putExtra("workoutDayId", workoutDayId)
                 startActivity(intent)
+                finish() // Close this activity
             }
         }
 
